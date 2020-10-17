@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  mosquitto:
+    image: eclipse-mosquitto:1.6.7
+    hostname: mosquitto
+    container_name: mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./conf/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  mongodb:
+    image: mongo:latest
+    hostname: mongo
+    container_name: mongo-iot
+    ports:
+      - 27017:27017

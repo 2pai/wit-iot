@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta name="author" content="Aurelio De Rosa">
+      <title>Dasbor</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <style>
+         .recognition-options
+         {
+            list-style: none;
+            padding: 0;
+         }
+
+         .recognition-options li
+         {
+            display: inline;
+         }
+
+         fieldset
+         {
+            border: 0;
+            margin: 0.5em 0;
+            padding: 0;
+         }
+
+         legend
+         {
+            padding: 0;
+         }
+         .fade-in {
+            opacity: 1;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in;
+            animation-duration: 1s;
+         }
+
+         @keyframes fadeInOpacity {
+            0% {
+               opacity: 0;
+            }
+            100% {
+               opacity: 1;
+            }
+         }
+
+      </style>
+   </head>
+   <body>
+    <div class="container">
+        <div class="jumbotron">
+      <h1 class="text-center">✨ Jarwis</h1>
+      <p><small>
+         Who need a Jarvis If we can build a jarwis *jk <br>
+         Build With ❤️  &nbsp; By Iqbal Syamil
+      </small></p>
+      <p hidden class="js-api-support">API not supported</p>
+
+      <div class="js-api-info">
+         <div class="form-group">
+            <textarea class="form-control" placeholder="Transcription" style="resize: none" aria-label="Transcription" id="transcription" class="log" readonly></textarea>
+        </div>
+
+         <form action="" method="get">
+            <button type="button" id="button-play" class="button">Listen</button>
+         </form>
+
+         <h2>Log</h2>
+         <div id="log" class="log"></div>
+        </div>
+        </div>
+        <div>
+           
+         <table id="sensor-table" class="table">
+            <thead>
+               <tr>
+                  <th>Date</th>
+                  <th>Humidity</th>
+                  <th>Temperature</th>
+               </tr>
+            </thead>
+            <tbody>
+            </tbody>
+         </table>
+
+        </div>
+      </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+      <script>
+         const apiHost = "http://localhost:3000"; // host your api gateway i.e http://localhost:3000
+         var mqtt;
+         const mqttHost = "localhost"; // your mqtt host i.e. localhost
+         const mqttPort = 9001; // port mqqt (websocket) default = 9001
+         const dateLang = "id-ID" // dateLocale Format
+         const speechRecognitionLang = "ID" // language used in speechRecognition i.e "EN"
+         function mqttConnect() {
+            mqtt = new Paho.MQTT.Client(mqttHost, Number(mqttPort), "client-web");
+            mqtt.connect({onSuccess:onConnect});
+            mqtt.onConnectionLost = onConnectionLost;
+            mqtt.onMessageArrived = onMessageArrived;
+         }
+         
+         function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            mqtt.subscribe("web");
+         }
+         function onMessageArrived(message) {
+            const payload = JSON.parse(message.payloadString);
+            var tablerow = tableref.insertRow(0)
+            tablerow.className = 'fade-in'
+            tablerow.innerHTML = `<tr class=fade-in> <td>${new Date(payload.date).toLocaleString(dateLang)}</td> <td>${payload.humidity}</td> <td>${payload.temp}</td> </tr>`
+         }
+         function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+               console.log("onConnectionLost:"+responseObject.errorMessage);
+            }
+         }
+         
+         function send(msg) {
+            const raw = JSON.stringify({"message":msg});
+            fetch(apiHost+"/send", {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json'
+               },
+               body: raw,
+               redirect: 'follow'
+            })
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));            
+         }
+         function logEvent(string) {
+            var log = document.getElementById('log');
+            
+            log.innerHTML = string + '<br />' + log.innerHTML;
+         }
+         
+         window.SpeechRecognition = window.SpeechRecognition        ||
+         window.webkitSpeechRecognition  ||
+         null;
+         
+         if (!SpeechRecognition) {
+            document.querySelector('.js-api-support').removeAttribute('hidden');
+            document.querySelector('.js-api-info').setAttribute('hidden', '');
+            [].forEach.call(document.querySelectorAll('form button'), function(button) {
+               button.setAttribute('disabled', '');
+            });
+         } else {
+            var recognizer = new SpeechRecognition();
+            var transcription = document.getElementById('transcription');
+            
+            // Start recognising
+            recognizer.addEventListener('result', function(event) {
+               transcription.textContent = '';
+               
+               for (var i = event.resultIndex; i < event.results.length; i++) {
+                  if (event.results[i].isFinal) {
+                     send(event.results[i][0].transcript)
+                     transcription.textContent = event.results[i][0].transcript +
+                     ' (Confidence: ' + event.results[i][0].confidence + ')';
+                  } else {
+                     transcription.textContent += event.results[i][0].transcript;
+                  }
+               }
+            });
+            
+            // Listen for errors
+            recognizer.addEventListener('error', function(event) {
+               logEvent('Recognition error: ' + event.message);
+            });
+            
+            recognizer.addEventListener('end', function() {
+               logEvent('Recognition ended');
+            });
+            
+            document.getElementById('button-play').addEventListener('click', function() {
+               document.getElementById('log').textContent = '';
+               
+               transcription.textContent = '';
+               
+               recognizer.lang = speechRecognitionLang
+               recognizer.continuous = !true;
+               recognizer.interimResults = true;
+               
+               try {
+                  recognizer.start();
+                  logEvent('Recognition started');
+               } catch(ex) {
+                  logEvent('Recognition error: ' + ex.message);
+               }
+            });
+            var tableref = document.getElementById('sensor-table').getElementsByTagName('tbody')[0];
+            document.addEventListener("DOMContentLoaded", function(event) {
+               fetch(apiHost+"/sensor-data")
+               .then(response => response.json())
+               .then(result => {
+                  result.forEach(res => {
+                     tableref.insertRow(tableref.rows.length).innerHTML = `<tr> <td>${new Date(res.date).toLocaleString("id-ID")}</td> <td>${res.payload.hum}</td> <td>${res.payload.temp}</td> </tr>`
+                  })
+               });
+
+               mqttConnect()
+            });
+
+         }
+      </script>
+   </body>
+</html>
