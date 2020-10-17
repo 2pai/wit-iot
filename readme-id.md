@@ -7,6 +7,46 @@ Seperti yang kita tahu, sekarang banyak aplikasi asisten personal virtual sepert
 
 Hari ini kita ingin membuat aplikasi asisten personal dengan tujuan untuk mengontrol alat IoT (menyiram tanaman). Kita akan mengkombinasikan beberapa teknologi seperti NLP, IoT, SpeechAPI, dll.
 
+## Daftar isi
+- [Membuat Asisten Pintar dengan wit.ai untuk mengatur perangkat IoT](#membuat-asisten-pintar-dengan-witai-untuk-mengatur-perangkat-iot)
+  - [Pengantar](#pengantar)
+  - [Daftar isi](#daftar-isi)
+  - [Membangun Aplikasi](#membangun-aplikasi)
+      - [Bagaimana cara kerjanya?](#bagaimana-cara-kerjanya)
+        - [Alur Kerja](#alur-kerja)
+        - [Alur Aksi](#alur-aksi)
+      - [Prasayarat](#prasayarat)
+        - [Perangkat Keras](#perangkat-keras)
+        - [Perangkat Lunak](#perangkat-lunak)
+  - [Mempersiapkan Lingkungan Pengembangan Aplikasi](#mempersiapkan-lingkungan-pengembangan-aplikasi)
+    - [Menyiapkan MQTT Broker & MongoDB](#menyiapkan-mqtt-broker--mongodb)
+    - [Menyiapkan Konfigurasi](#menyiapkan-konfigurasi)
+  - [Melatih Aplikasi Wit untuk melakukan Pemrosesan Bahasa Natural (NLP)](#melatih-aplikasi-wit-untuk-melakukan-pemrosesan-bahasa-natural-nlp)
+      - [Membuat Aplikasi Wit](#membuat-aplikasi-wit)
+      - [Mentrain Aplikasi Wit dengan Ungkapan](#mentrain-aplikasi-wit-dengan-ungkapan)
+        - [Menyalakan Pompa](#menyalakan-pompa)
+        - [Mematikan Pompa](#mematikan-pompa)
+        - [Mengambil Data Pompa](#mengambil-data-pompa)
+      - [Membuat konektor wit pada aplikasi](#membuat-konektor-wit-pada-aplikasi)
+        - [Memperbaharui file configurasi](#memperbaharui-file-configurasi)
+  - [Membuat Gerbang API](#membuat-gerbang-api)
+    - [Membuat konektor MongoDB](#membuat-konektor-mongodb)
+    - [Membuat konektor MQTT](#membuat-konektor-mqtt)
+    - [Membuat kontroler aplikasi](#membuat-kontroler-aplikasi)
+    - [Membuat Rest API untuk Gerbang API](#membuat-rest-api-untuk-gerbang-api)
+  - [Membuat Dasbor (Frontend)](#membuat-dasbor-frontend)
+      - [Mengkonfigurasi Aplikasi Frontend](#mengkonfigurasi-aplikasi-frontend)
+  - [Mengatur Perangkat IoT](#mengatur-perangkat-iot)
+    - [Instalasi *Library*](#instalasi-library)
+    - [Gambaran Skema Perangkat IoT](#gambaran-skema-perangkat-iot)
+      - [Mencompile kode pada perangkat IoT](#mencompile-kode-pada-perangkat-iot)
+        - [Mengkonfigurasi Perangkat IoT](#mengkonfigurasi-perangkat-iot)
+  - [Menjalankan Keseluruhan aplikasi](#menjalankan-keseluruhan-aplikasi)
+    - [Gambaran Arsitektur](#gambaran-arsitektur)
+    - [Jalankan Gerbang API, MongoDB Dan MQTT Broker](#jalankan-gerbang-api-mongodb-dan-mqtt-broker)
+  - [Ringkasan & Penutup](#ringkasan--penutup)
+    - [Apa Selanjutnya?](#apa-selanjutnya)
+    - [Referensi](#referensi)
 
 ## Membangun Aplikasi
 
@@ -20,7 +60,7 @@ Dilihat secara garis besar, aplikasi ini akan bekerja seperti ini :
 3. Apabila `Log` menampilkan pesan `Recognition ended` Maka perintah akan diteruskan ke server. 
 4. Server akan melakukan perintah user dan menampilkan data (apabila yang diminta) ke dalam dasbor.
 
-##### Ini adalah alur kerjanya
+##### Alur Kerja
 
 ![alt text](./assets/gif/demo-app.gif "Demo Dari Aplikasi")
 
@@ -37,7 +77,7 @@ Disini saya mencoba membagi aplikasi ini menjadi 5 bagian, yaitu :
 Saya akan membahas masing-masing bagian ini.
 
 Untuk memberikan gambaran lebih jelasnya bagaimana aplikasi ini bekerja dibalik layar. 
-##### Ini adalah alur aksinya
+##### Alur Aksi
 ![alt text](./assets/img/cara-kerja.png "Cara Kerja Aplikasi")
 
 
@@ -117,10 +157,10 @@ Lakukan Konfigurasi kompiler typescript dengan membuat file `tsconfig.json` beri
 
 ```
 
-Lakukan Initalasi package yang akan digunakan aplikasi kita dengan membuat file `package.json` yang berisi json file di atas.
+Lakukan Initalasi *package* yang akan digunakan aplikasi kita dengan membuat file `package.json` yang berisi JSON file di atas.
 
-##### Menyiapkan MQTT Broker & MongoDB
-Kita juga akan menggunakan MQTT Broker(Mosquitto) & Basis data(MongoDB). Alih-alih menginstall di local, kita akan menggunakan docker untuk menjalankan servis tersebut.
+### Menyiapkan MQTT Broker & MongoDB
+Kita juga akan menggunakan MQTT Broker(Mosquitto) & Basis data(MongoDB). Alih-alih menginstallnya di local/langsung di perangkat yang kita gunakan, kita akan menggunakan docker untuk menjalankan layanan tersebut.
 ```yaml
 # Docker-compose.yml
 version: '3.7'
@@ -153,7 +193,7 @@ listener 9001
 protocol websockets
 
 ```
-##### Menyiapkan Konfigurasi
+### Menyiapkan Konfigurasi
 Untuk menyimpan konfigurasi, kita menggunakan `.env` file. Buatlah file ini di `/` Folder dengan isi :
 ```
 # .env 
@@ -202,12 +242,12 @@ Pada bagian ini kita ingin mencoba untuk mentrain aplikasi wit agar dapat mengen
 5. Klik `Add Trait` dan pilih `wit/on_off` kemudian pilih `on`
 6. Klik `Train and validate`
 
-###### Mematikan Pompa
+##### Mematikan Pompa
 1. Masukan kata `matikan pompa` kedalam _form_ `Utterance`
 2. Set **Intent** = `setdevice` , **Entity** device = `pompa` , dan `wit/on_off` = `off`
 3. Klik `Train and validate`
 
-###### Mengambil Data Pompa
+##### Mengambil Data Pompa
 1. Masukan kata `ambil data pompa` kedalam _form_ `Utterance`
 2. Pilih _Add Intent_ dan masukan `get_device` kemudian `Create Intent`
 3. Pastikan _Trait_ kosong
@@ -221,9 +261,9 @@ Kita dapat mentrain aplikasi wit dengan frasa yang lainnya, Ini dapat membuat mo
 - Pompa matikan
 
 Lakukan proses serupa seperti di atas dan pastikan hasil output sudah valid setelah itu lakukan proses train.
-##### Membuat konektor wit pada aplikasi
+#### Membuat konektor wit pada aplikasi
 Buat file `wit.ts` di dalam folder `./src/backend/`
-di dalam file ini kita ingin membuat konektor aplikasi wit kita agar bisa dipanggil oleh Gerbang API.
+file ini kita buat sebagai konektor Gerbang API agar bisa memanggil Aplikasi Wit yang telah kita buat sebelumnya.
 ```typescript
 // wit.ts
 import {Wit} from 'node-wit';
@@ -246,7 +286,7 @@ export default {
     get
 }
 ```
-Di file ini kita mempunya 1 fungsi `get(message)` yang digunakan untuk merequest message text ke dalam aplikasi Wit kita, fungsi ini akan mengembalikan respond dari wit yang berisi **Text, Inten, Trait & Entity** yang memiliki bobot `confidence` sebagai patokan apakah prediksi NLP tersebut kuat atau tidak.
+Di file ini kita mempunya 1 fungsi `get(message)` yang digunakan untuk men*request message text* ke dalam aplikasi Wit kita, fungsi ini akan mengembalikan *response* dari wit.ai yang berisi **Text, Inten, Trait & Entity** yang mana tiap bagiannya memiliki bobot `confidence` sebagai patokan apakah prediksi NLP tersebut kuat atau tidak.
 
 ##### Memperbaharui file configurasi
 Untuk mendapatkan token wit dari aplikasi kita dapat membuka menu **MyApps** > **[Nama aplikasi Wit]** > **Management** > **Setting** > **Server Access Token**.
@@ -260,7 +300,7 @@ WIT_TOKEN= <Your wit token>
 Gerbang API akan digunakan sebagai perantara antara aplikasi Dasbor, Wit.ai, MQTT & MongoDB. Disini kita menggunakan REST API untuk berkomunikasi dengan aplikasi frontend.
 
 ### Membuat konektor MongoDB
-Disini kita membuat konektor MongoDB yang nantinya akan digunakan aplikasi kita untuk menyimpan data-data riwayat dari statistik device. Kita membuat file `mongo.ts` di dalam folder `src/backend`
+Disini kita membuat konektor MongoDB yang nantinya akan digunakan aplikasi kita untuk menyimpan data-data riwayat dari statistik perangkat IoT. Kita membuat file `mongo.ts` di dalam folder `src/backend`
 ```typescript
 // mongo.ts
 import mongoose from 'mongoose'
@@ -290,7 +330,7 @@ Konektor ini berisikan skema dari data yang nantinya akan kita simpan dan fungsi
 
 
 ### Membuat konektor MQTT
-Dalam berkomunikasi dengan perangkat IoT via Gerbang API, kita menggunakan protokol MQTT (TCP). Alasan utama kenapa kita menggunakan ini agar aplikasi kita dapat menghandle request secara asinkronus dan tidak memblok proses yang lain. Selain itu juga karena protokol ini memang umum digunakan untuk berkomunikasi dengan perangkat IoT. 
+Dalam berkomunikasi dengan perangkat IoT via Gerbang API, kita menggunakan protokol MQTT (TCP). Alasan utama kenapa kita menggunakan ini agar aplikasi kita dapat menghandle *request* secara asinkronus dan tidak memblok proses yang lain. Selain itu juga karena protokol ini memang umum digunakan untuk berkomunikasi dengan perangkat IoT. 
 
 Untuk membuat konektornya, kita buat file `mqtt.ts` di dalam direktori `/src/backend/`
 ```typescript
@@ -341,7 +381,7 @@ export default {
     sub
 }
 ```
-Kode di atas secara garis besar membungkus fungsi publish dan subscribe yang ada pada mqtt agar dapat digunakan dengan mudah oleh modul lain. 
+Kode di atas secara garis besar membungkus fungsi `publish` dan `subscribe` yang ada pada `mqtt.client` agar dapat digunakan dengan mudah oleh modul lain. 
 
 Disini kita juga menangani pesan yang masuk dari perangkat IoT, pesan laporan yang masuk dengan jenis `pompa-stats` akan dimasukan ke dalam basis data MongoDB. 
 Setelah itu, isi payload yang berisi statistik perangkat akan dilanjutkan untuk dikirim ke Dasbor (Frontend) lewat MQTT Dengan topik `web`
@@ -385,9 +425,9 @@ export default {
     execute
 }
 ```
-Fungsi `execute` akan memastikan intent dari payload, jika intent tersebut adalah `set_device` maka sebuah pesan akan dipublish melalui MQTT dengan tujuan nama perangkat tersebut yang berisi pesan traits (On/Off), jika intent tersebut adalah `get_device` maka sebuah pesan akan dipublish melalui MQTT dengan tujuan `pompa-stats` yang berisi pesan `1` (Untuk memantik sensor). 
+Fungsi `execute` akan memastikan *Intent* dari *payload*, jika *Intent* tersebut adalah `set_device` maka sebuah pesan akan dipublish melalui MQTT dengan tujuan nama perangkat tersebut yang berisi pesan *Traits* (On/Off), jika *Intent* tersebut adalah `get_device` maka sebuah pesan akan dipublish melalui MQTT dengan tujuan `pompa-stats` yang berisi pesan `1` (Untuk memantik sensor). 
 
-Fungsi `execute` akan diekspor dan nantinya akan dipanggil dari Gerbang API
+Fungsi `execute` akan diekspor dan nantinya akan dipanggil dari *entrypoint* Gerbang API
 
 ### Membuat Rest API untuk Gerbang API
 Kita akan menggunakan REST sebagai API. Tak hanya untuk menyediakan *endpoint* untuk backend, disini kita juga menggunakanya untuk menserve aplikasi dasbor (Frontend)
@@ -444,21 +484,21 @@ app.listen(config.port, () => {
     console.log(`This app runs on ${config.port}`)
 })
 ```
-Disini kita mempunyai 4 Endpoint, yaitu :
+Disini kita mempunyai 4 *Endpoint*, yaitu :
 
 1. `GET /`
-Endpoint ini digunakan untuk mengecek apakah Aplikasi Gerbang API kita sudah jalan & dapat diakses. 
+*Endpoint* ini digunakan untuk mengecek apakah Aplikasi Gerbang API kita sudah berjalan & dapat diakses. 
 2. `GET /dashboard`
-Endpoint ini digunakan untuk menampilkan file `frontend/index.html` yang berisi aplikasi Dasbor (frontend).
+*Endpoint* ini digunakan untuk menampilkan file `frontend/index.html` yang berisi aplikasi Dasbor (frontend).
 3. `POST /send` 
-Endpoint ini digunakan untuk menerima payload berupa Tulisan dari aplikasi frontend, tulisan ini merupakan hasil dari pengolahan API `SpeechRecognition`. Setelah itu tulisan tersebut akan di gunakan sebagai parameter pesan yang dikirimkan ke dalam aplikasi Wit. Hasil dari pemorsesan dari proses tersebut akan diteruskan ke dalam kontroller yang nantinya akan menentukan eksekusi apa yang akan dilakukan. 
+*Endpoint* ini digunakan untuk menerima *payload* berupa *text* dari aplikasi frontend, *text* ini merupakan hasil dari pengolahan API `SpeechRecognition`. Setelah itu *text* tersebut akan digunakan sebagai parameter pesan yang dikirimkan ke dalam aplikasi Wit. Hasil dari pemorsesan dari proses tersebut akan diteruskan ke dalam kontroller yang nantinya akan menentukan eksekusi apa yang akan dilakukan. 
 4. `GET /sensor-data`
-Endpoint ini digunakan untuk menampilkan 5 data terakhir dari sensor pada perangkat IoT kita. Ini digunakan sebagai data awal di dalam aplikasi Dasbor
+*Endpoint* ini digunakan untuk menampilkan 5 data terakhir dari sensor pada perangkat IoT kita. Ini digunakan sebagai data awal di dalam aplikasi Dasbor
 
 Aplikasi ini akan jalan di atas port yang kita deklarasikan di dalam file `.env`
 
 ## Membuat Dasbor (Frontend)
-Agar dapat menggunakan aplikasi ini dengan mudah, maka disini kita membutuhkan Dasbor agar penggunaanya dapat lebih mudah. 
+Agar dapat menggunakan aplikasi ini dengan mudah, maka disini kita membuat Dasbor(Interface/Frontend) agar penggunaanya dapat lebih mudah. 
 Aplikasi Dasbor ini akan meneruskan permintaan dari pengguna ke Gerbang API lewat panggilan HTTP, untuk menerima data menggunakan Websocket & HTTP.
 Disini Kita menggunakan single file `index.html`, library css yang kita gunakan adalah Bootstrap 4 dan untuk menerima pesan MQTT(Websocket) kita menggunakan library `paho-mqtt`. 
 
@@ -680,7 +720,7 @@ Buat file `index.html` di dalam direktori `./src/frontend`
 
 ```
 #### Mengkonfigurasi Aplikasi Frontend 
-Ada hal yang perlu diperhatikan, pastikan konfigurasi pada aplikasi dasbor sudah tepat, disini kita mendefinisikan beberapa hal, seperti alamat `apiHost`, alamat `mqqtHost`, port `mqttPort`, format tanggal `dateLang`, format bahasa yang digunakan pada *Speech Recognition* API `speechRecognitionLang` . 
+Ada hal yang perlu diperhatikan, pastikan konfigurasi pada aplikasi Dasbor sudah tepat, disini kita mendefinisikan beberapa hal, seperti alamat `apiHost`, alamat `mqqtHost`, port `mqttPort`, format tanggal `dateLang`, format bahasa yang digunakan pada *Speech Recognition* API `speechRecognitionLang` . 
 
 ```js
          /* ... Kode Terpotong */
@@ -714,12 +754,12 @@ Dibawah ini merupakan gambaran skema dari perangkat IoT yang digunakan pada tuli
 ![alt text](./assets/img/skema.png "Gambaran Skema Perangkat IoT")
 Catatan : 
 - Garis Biru = Jalur sinyal digital/analog
-- Garis Hijau = Jalur arus +
+- Garis Hijau = Jalur arus + Positif 
 - Garis Merah = Jalur arus - (Ground/GND)
 
 #### Mencompile kode pada perangkat IoT
 
-Gunakan kode dibawah ini untuk dikompile pada perangkat IoT.
+Gunakan kode dibawah ini untuk dikompile pada perangkat IoT (NodeMCU ESP8266).
 ```c++
 #define SerialMon Serial
 
@@ -886,7 +926,7 @@ Aplikasi ini masih belum sempurna, Jika teman-teman tertarik untuk mengembangkan
 - Mengatur perangkat (Menambahkan, Menghapus, Mengedit)
 - Menvisualisasikan perangkat yang aktif/tidak aktif
 - Membuat versi Aplikasi Mobile
-- Dan lain lain
+- Dan lain -ain
 
 ### Referensi
 - https://medium.com/wit-ai/build-an-interactive-voice-enabled-android-app-with-wit-ai-6f6d72cf94be
