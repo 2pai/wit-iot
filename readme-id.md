@@ -6,7 +6,7 @@
 Seperti yang kita tahu, sekarang banyak aplikasi asisten personal virtual seperti siri, alexa, google assistant,dll yang dapat mempermudah kita dalam kehidupan sehari hari. Kita dapat memberikan perintah berupa tulisan / suara yang nantinya asisten personal akan memberikan balikan berupa informasi/aksi. 
 
 ### Apa itu NLP ?
-NLP Merupakan singkatan dari *Natrual Language Processing* yaitu adalah salah satu subset dari cabang ilmu kecerdasan buatan, cabang ilmu ini bertujuan untuk menghubungkan antara bahasa manusia dengan bahasa mesin/komputer.
+NLP Merupakan singkatan dari *Natrual Language Processing* adalah salah satu subset dari cabang ilmu kecerdasan buatan, cabang ilmu ini bertujuan untuk menghubungkan antara bahasa manusia dengan bahasa mesin/komputer.
 
 ### Tujuan
 Hari ini kita ingin membuat aplikasi asisten personal dengan tujuan untuk mengontrol alat IoT (menyiram tanaman). Kita akan mengkombinasikan beberapa teknologi seperti NLP, IoT, SpeechAPI, dll.
