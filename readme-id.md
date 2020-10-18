@@ -1,127 +1,137 @@
 <!-- # Smart assistant with wit.ai for IoT -->
-# Membuat Asisten Pintar dengan wit.ai untuk mengatur perangkat IoT
+
+# Membuat Asisten Pintar dengan wit.ai untuk Mengatur Perangkat IoT
 
 ## Pengantar
 
-Seperti yang kita tahu, sekarang banyak aplikasi asisten personal virtual seperti siri, alexa, google assistant,dll yang dapat mempermudah kita dalam kehidupan sehari hari. Kita dapat memberikan perintah berupa tulisan / suara yang nantinya asisten personal akan memberikan balikan berupa informasi/aksi. 
+Seperti yang kita ketahui, sekarang banyak aplikasi asisten personal virtual seperti Siri, Alexa, Google Assistant, dll yang dapat mempermudah kita dalam kehidupan sehari-hari. Kita dapat memberikan perintah berupa tulisan maupun suara yang nantinya asisten personal akan memberikan balikan berupa informasi/aksi.
 
 ### Apa itu NLP ?
-NLP Merupakan singkatan dari *Natrual Language Processing* adalah salah satu subset dari cabang ilmu kecerdasan buatan, cabang ilmu ini bertujuan untuk menghubungkan antara bahasa manusia dengan bahasa mesin/komputer.
+
+NLP merupakan singkatan dari _Natrual Language Processing_, adalah salah satu cabang ilmu kecerdasan buatan yang bertujuan untuk menghubungkan bahasa manusia dengan bahasa mesin atau komputer.
 
 ### Tujuan
-Hari ini kita ingin membuat aplikasi asisten personal dengan tujuan untuk mengontrol alat IoT (menyiram tanaman). Kita akan mengkombinasikan beberapa teknologi seperti NLP, IoT, SpeechAPI, dll.
+
+Hari ini kita akan membuat aplikasi asisten personal dengan tujuan untuk mengontrol alat IoT (menyiram tanaman). Kita akan mengkombinasikan beberapa teknologi seperti NLP, IoT, SpeechAPI, dll.
 
 ## Daftar isi
-- [Membuat Asisten Pintar dengan wit.ai untuk mengatur perangkat IoT](#membuat-asisten-pintar-dengan-witai-untuk-mengatur-perangkat-iot)
+
+- [Membuat Asisten Pintar dengan wit.ai untuk Mengatur Perangkat IoT](#membuat-asisten-pintar-dengan-witai-untuk-mengatur-perangkat-iot)
   - [Pengantar](#pengantar)
     - [Apa itu NLP ?](#apa-itu-nlp-)
     - [Tujuan](#tujuan)
-  - [Daftar isi](#daftar-isi)
+  - [Daftar Isi](#daftar-isi)
   - [Membangun Aplikasi](#membangun-aplikasi)
-      - [Bagaimana cara kerjanya?](#bagaimana-cara-kerjanya)
-        - [Alur Kerja](#alur-kerja)
-        - [Alur Aksi](#alur-aksi)
-      - [Prasayarat](#prasayarat)
-        - [Perangkat Keras](#perangkat-keras)
-        - [Perangkat Lunak](#perangkat-lunak)
+    - [Bagaimana Cara Kerjanya?](#bagaimana-cara-kerjanya)
+      - [Alur Kerja](#alur-kerja)
+      - [Alur Aksi](#alur-aksi)
+    - [Prasyarat](#prasayarat)
+      - [Perangkat Keras](#perangkat-keras)
+      - [Perangkat Lunak](#perangkat-lunak)
   - [Mempersiapkan Lingkungan Pengembangan Aplikasi](#mempersiapkan-lingkungan-pengembangan-aplikasi)
-    - [Menyiapkan MQTT Broker & MongoDB](#menyiapkan-mqtt-broker--mongodb)
-    - [Menyiapkan Konfigurasi](#menyiapkan-konfigurasi)
-  - [Melatih Aplikasi Wit untuk melakukan Pemrosesan Bahasa Natural (NLP)](#melatih-aplikasi-wit-untuk-melakukan-pemrosesan-bahasa-natural-nlp)
-      - [Membuat Aplikasi Wit](#membuat-aplikasi-wit)
-      - [Mentrain Aplikasi Wit dengan Ungkapan](#mentrain-aplikasi-wit-dengan-ungkapan)
-        - [Menyalakan Pompa](#menyalakan-pompa)
-        - [Mematikan Pompa](#mematikan-pompa)
-        - [Mengambil Data Pompa](#mengambil-data-pompa)
-      - [Membuat konektor wit pada aplikasi](#membuat-konektor-wit-pada-aplikasi)
-        - [Memperbaharui *file* configurasi](#memperbaharui-file-configurasi)
+    - [Mempersiapkan MQTT Broker & MongoDB](#menyiapkan-mqtt-broker--mongodb)
+    - [Mempersiapkan Konfigurasi](#menyiapkan-konfigurasi)
+  - [Melatih Aplikasi Wit untuk Melakukan Pemrosesan Bahasa Natural (NLP)](#melatih-aplikasi-wit-untuk-melakukan-pemrosesan-bahasa-natural-nlp)
+    - [Membuat Aplikasi Wit](#membuat-aplikasi-wit)
+    - [Mentrain Aplikasi Wit dengan Ungkapan](#mentrain-aplikasi-wit-dengan-ungkapan)
+      - [Menyalakan Pompa](#menyalakan-pompa)
+      - [Mematikan Pompa](#mematikan-pompa)
+      - [Mengambil Data Pompa](#mengambil-data-pompa)
+    - [Membuat Konektor Wit pada Aplikasi](#membuat-konektor-wit-pada-aplikasi)
+      - [Memperbaharui _File_ Konfigurasi](#memperbaharui-file-configurasi)
   - [Membuat Gerbang API](#membuat-gerbang-api)
-    - [Membuat konektor MongoDB](#membuat-konektor-mongodb)
-    - [Membuat konektor MQTT](#membuat-konektor-mqtt)
-    - [Membuat kontroler aplikasi](#membuat-kontroler-aplikasi)
+    - [Membuat Konektor MongoDB](#membuat-konektor-mongodb)
+    - [Membuat Konektor MQTT](#membuat-konektor-mqtt)
+    - [Membuat Kontroler Aplikasi](#membuat-kontroler-aplikasi)
     - [Membuat Rest API untuk Gerbang API](#membuat-rest-api-untuk-gerbang-api)
-  - [Membuat Dasbor (*Frontend*)](#membuat-dasbor-frontend)
-      - [Mengkonfigurasi Aplikasi *Frontend*](#mengkonfigurasi-aplikasi-frontend)
+  - [Membuat Dasbor (_Frontend_)](#membuat-dasbor-frontend)
+    - [Mengkonfigurasi Aplikasi _Frontend_](#mengkonfigurasi-aplikasi-frontend)
   - [Mengatur Perangkat IoT](#mengatur-perangkat-iot)
-    - [Instalasi *Library*](#instalasi-library)
+    - [Instalasi _Library_](#instalasi-library)
     - [Gambaran Skema Perangkat IoT](#gambaran-skema-perangkat-iot)
-      - [Meng*compile* kode pada perangkat IoT](#mengcompile-kode-pada-perangkat-iot)
+      - [Meng-_compile_ Kode pada Perangkat IoT](#mengcompile-kode-pada-perangkat-iot)
         - [Mengkonfigurasi Perangkat IoT](#mengkonfigurasi-perangkat-iot)
-  - [Menjalankan Keseluruhan aplikasi](#menjalankan-keseluruhan-aplikasi)
+  - [Menjalankan Keseluruhan Aplikasi](#menjalankan-keseluruhan-aplikasi)
     - [Gambaran Arsitektur](#gambaran-arsitektur)
-    - [Jalankan Gerbang API, MongoDB Dan MQTT Broker](#jalankan-gerbang-api-mongodb-dan-mqtt-broker)
-  - [Ringkasan & Penutup](#ringkasan--penutup)
+    - [Jalankan Gerbang API, MongoDB dan MQTT Broker](#jalankan-gerbang-api-mongodb-dan-mqtt-broker)
+  - [Ringkasan dan Penutup](#ringkasan--penutup)
     - [Apa Selanjutnya?](#apa-selanjutnya)
     - [Referensi](#referensi)
 
 ## Membangun Aplikasi
 
-Sebelum membuat aplikasi, saya akan membahas cara kerjanya dan prasyarat untuk diikuti. 
-Setelah itu, saya akan membahas setiap langkah sebelum menyiapkannya untuk dijalankan diproduksi.
-#### Bagaimana cara kerjanya?
+Sebelum membuat aplikasi, saya akan membahas cara kerjanya dan prasyarat untuk diikuti.
+Setelah itu, saya akan membahas setiap langkah sebelum siap untuk dijalankan diproduksi.
 
-Dilihat secara garis besar, aplikasi ini akan bekerja seperti ini : 
-1. Buka Browser > Pergi ke alamat **Dasbor Aplikasi**.
-2. Klik Tombol `Listen` > Berikan perintah suara setelah `Log` menampilkan pesan `Recognition Started`
-3. Apabila `Log` menampilkan pesan `Recognition ended` Maka perintah akan diteruskan ke server. 
-4. Server akan melakukan perintah user dan menampilkan data (apabila yang diminta) ke dalam dasbor.
+#### Bagaimana Cara Kerjanya?
+
+Secara garis besar, aplikasi ini akan bekerja seperti ini:
+
+1. Buka _browser_ > pergi ke alamat **Dasbor Aplikasi**.
+2. Klik tombol `Listen` > berikan perintah suara setelah `Log` menampilkan pesan `Recognition Started`
+3. Apabila `Log` menampilkan pesan `Recognition ended` maka perintah akan diteruskan ke _server_.
+4. _Server_ akan melakukan perintah _user_ dan menampilkan data (yang diminta) ke dasbor.
 
 ##### Alur Kerja
 
-![alt text](./assets/gif/demo-app.gif "Demo Dari Aplikasi")
+![alt text](./assets/gif/demo-app.gif 'Demo Dari Aplikasi')
 
+Cara kerja aplikasi ini cukup sederhana, tetapi di sini kita menggunakan banyak teknologi untuk mencapai tujuan tersebut. Ini digunakan agar aplikasi yang kita buat kali ini dapat dikembangkan dengan tujuan lebih luas lagi dengan mudah.
 
-Cara kerja aplikasi ini cukup simpel, tetapi disini kita menggunakan banyak teknologi untuk mencapai tujuan tersebut. Ini digunakan agar aplikasi yang kita buat kali ini dapat dikembangkan dengan tujuan lebih luas lagi dengan mudah. 
+Di sini saya mencoba membagi aplikasi ini menjadi 5 bagian, yaitu:
 
-Disini saya mencoba membagi aplikasi ini menjadi 5 bagian, yaitu: 
 - Infrastuktur (MQTT Broker & Basis Data)
-- Gerbang API (*Backend*)
-- Dasbor (*Frontend*)
+- Gerbang API (_Backend_)
+- Dasbor (_Frontend_)
 - Sistem NLP (Wit.ai)
 - Perangkat IoT (Mikrokontroller)
 
 Saya akan membahas masing-masing bagian ini.
-Untuk memberikan gambaran lebih jelasnya bagaimana aplikasi ini bekerja dibalik layar. 
+Untuk memberikan gambaran detail mengenai bagaimana aplikasi ini bekerja dibalik layar.
+
 ##### Alur Aksi
-![alt text](./assets/img/cara-kerja.png "Cara Kerja Aplikasi")
 
+![alt text](./assets/img/cara-kerja.png 'Cara Kerja Aplikasi')
 
-#### Prasayarat
-Untuk dapat menjalankan keseluruhan bagian aplikasi, ada beberapa hal yang perlu dipersiapkan yaitu :
+#### Prasyarat
+
+Untuk dapat menjalankan keseluruhan bagian aplikasi, ada beberapa hal yang perlu dipersiapkan yaitu:
 
 ##### Perangkat Keras
+
 - 1x NodeMCU ESP8266
 - 1x DHT 22
-- 1x Relay *Module*
+- 1x Relay _Module_
+
 ##### Perangkat Lunak
-- Browser yang mensupport API `SpeechRecognition`
+
+- _Browser_ yang mensupport API `SpeechRecognition`
 - Docker & Docker-Compose
 - NodeJS, NPM & Typescript
 - Arduino IDE
 
-
-
 ## Mempersiapkan Lingkungan Pengembangan Aplikasi
 
-Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplikasi, disini kita menggunakan [typescript](https://www.typescriptlang.org/) & [npm](https://www.npmjs.com) untuk pengembangan aplikasi kita. Pastikan Typescript sudah terinstall, jika belum jalankan perintah `npm install -g typescript` untuk menginstall typescript
+Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplikasi. Di sini kita menggunakan [typescript](https://www.typescriptlang.org/) dan [npm](https://www.npmjs.com) untuk pengembangan aplikasi kita. Pastikan Typescript sudah ter-_install_. Jika belum, maka jalankan perintah `npm install -g typescript` untuk meng-_install_ typescript.
+
 ```json
 // tsconfig.json
 {
-    "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": true,
-      "moduleResolution": "node",
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-    }
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
-  
+}
 ```
-Lakukan Konfigurasi *compiler* typescript dengan membuat *file* `tsconfig.json` berisikan JSON *file* di atas.
+
+Lakukan Konfigurasi _compiler_ typescript dengan membuat _file_ `tsconfig.json` yang berisi JSON _file_ di atas.
 
 ```json
 // package.json
@@ -159,13 +169,14 @@ Lakukan Konfigurasi *compiler* typescript dengan membuat *file* `tsconfig.json` 
     "path": "^0.12.7"
   }
 }
-
 ```
 
-Lakukan Initalasi *package* yang akan digunakan aplikasi kita dengan membuat *file* `package.json` yang berisi JSON *file* di atas.
+Lakukan instalasi _package_ yang akan digunakan pada aplikasi kita dengan membuat _file_ `package.json` yang berisi JSON _file_ di atas.
 
 ### Menyiapkan MQTT Broker & MongoDB
-Kita juga akan menggunakan MQTT Broker(Mosquitto) & Basis data(MongoDB). Alih-alih menginstallnya di local/langsung di perangkat yang kita gunakan, kita akan menggunakan docker untuk menjalankan layanan tersebut.
+
+Kita juga akan menggunakan MQTT Broker(Mosquitto) & basis data (MongoDB). Alih-alih meng-_install_-nya di _local_/langsung di perangkat yang kita gunakan, kita akan menggunakan Docker untuk menjalankan layanan tersebut.
+
 ```yaml
 # Docker-compose.yml
 version: '3.7'
@@ -185,9 +196,10 @@ services:
     container_name: mongo-iot
     ports:
       - 27017:27017
-
 ```
-Untuk mengaktifkan protokol websocket di dalam MQTT broker kita dapat mengatur konfigurasi *file* dengan membuat *file* `./conf/mosquitto.conf` yang nantinya akan berjalan pada PORT 9001
+
+Untuk mengaktifkan protokol Websocket di dalam MQTT broker, kita dapat mengatur konfigurasi _file_ dengan membuat _file_ `./conf/mosquitto.conf` yang nantinya akan berjalan pada PORT 9001.
+
 ```
 
 # this will listen for mqtt on tcp
@@ -198,17 +210,21 @@ listener 9001
 protocol websockets
 
 ```
-### Menyiapkan Konfigurasi
-Untuk menyimpan konfigurasi, kita menggunakan `.env` file. Buatlah *file* ini di `/` Folder dengan isi :
+
+### Mempersiapkan Konfigurasi
+
+Untuk menyimpan konfigurasi, kita menggunakan `.env` file. Buatlah _file_ ini di `/` _folder_ dengan isi :
+
 ```
-# .env 
+# .env
 PORT=3000
 MQTT_URI=mqtt://localhost
 MONGO_URI=mongodb://localhost:27017/jarwin
 WIT_TOKEN= #Your wit token
 
 ```
-Agar *file* `.env` dapat dibaca oleh aplikasi kita, disini kita akan membuat *file* untuk menload *file* `.env` dengan nama `config.ts` di dalam folder `./src/backend/`
+
+Agar _file_ `.env` dapat dibaca oleh aplikasi kita, di sini kita akan membuat _file_ untuk men-_load_ _file_ `.env` dengan nama `config.ts` di dalam folder `./src/backend/`
 
 ```typescript
 // config.ts
@@ -216,85 +232,96 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export default {
-    mongoURI: process.env.MONGO_URI ?? '',
-    mqttURI: process.env.MQTT_URI ?? '',
-    witToken: process.env.WIT_TOKEN ?? '',
-    port: process.env.PORT ?? 3000
-}
+  mongoURI: process.env.MONGO_URI ?? '',
+  mqttURI: process.env.MQTT_URI ?? '',
+  witToken: process.env.WIT_TOKEN ?? '',
+  port: process.env.PORT ?? 3000,
+};
 ```
 
-Setelah semuanya siap, kita dapat memulai untuk melakukan pengembangan aplikasi. 
+Setelah semuanya selesai, kita dapat mulai mengembangkan aplikasi.
 
-## Melatih Aplikasi Wit untuk melakukan Pemrosesan Bahasa Natural (NLP)
-Disini kita menggunakan [wit.ai](https://wit.ai/) sebagai NLP sistem kita. Dengan ini kita dapat membuat asisten personal yang kita buat senatural mungkin dan tidak perlu untuk *membuat machine learning model* dengan alat seperti pytorch, tensorflow, dll  untuk aplikasi kita.
+## Melatih Aplikasi Wit untuk Melakukan Pemrosesan Bahasa Natural (NLP)
 
+Di sini kita menggunakan [wit.ai](https://wit.ai/) sebagai NLP sistem kita. Dengan ini, kita dapat membuat asisten personal yang kita buat se-natural mungkin dan tidak perlu _membuat machine learning model_ dengan _library_ seperti PyTorch, Tensorflow, dll untuk aplikasi kita.
 
 Pada bagian ini kita ingin mencoba untuk melatih aplikasi wit agar dapat mengenali beberapa perintah seperti `set_device` dan `get_device` pada perangkat IoT kita.
 
 #### Membuat Aplikasi Wit
-1. Buka Wit.ai dan masuk dengan menggunakan akun facebook
+
+1. Buka Wit.ai dan masuk dengan menggunakan akun Facebook
 2. Buat aplikasi wit
 3. Masukan nama aplikasi, bahasa yang digunakan, dan jenis _visibility_.
 4. Klik `Create`
 
 #### Mentrain Aplikasi Wit dengan Ungkapan
+
 ##### Menyalakan Pompa
 
 1. Pilih menu `understanding`
-2. Masukan Kata `Nyalakan Pompa` kedalam _form_ **Utterance**
-3. Pilih _Add Intent_ dan masukan `set_device` kemudian `Create Intent`
-4. Blok kata `pompa` dan masukan `device` pada kolom _entitiy_ kemudian `Create Entity`
+2. Masukan kata `Nyalakan Pompa` ke dalam _form_ **Utterance**
+3. Pilih _Add Intent_ dan masukkan `set_device` kemudian `Create Intent`
+4. Blok kata `pompa` dan masukkan `device` pada kolom _entitiy_ kemudian `Create Entity`
 5. Klik `Add Trait` dan pilih `wit/on_off` kemudian pilih `on`
 6. Klik `Train and validate`
 
 ##### Mematikan Pompa
-1. Masukan kata `matikan pompa` kedalam _form_ `Utterance`
+
+1. Masukkan kata `matikan pompa` kedalam _form_ `Utterance`
 2. Set **Intent** = `setdevice` , **Entity** device = `pompa` , dan `wit/on_off` = `off`
 3. Klik `Train and validate`
 
 ##### Mengambil Data Pompa
-1. Masukan kata `ambil data pompa` kedalam _form_ `Utterance`
+
+1. Masukan kata `ambil data pompa` ke dalam _form_ `Utterance`
 2. Pilih _Add Intent_ dan masukan `get_device` kemudian `Create Intent`
 3. Pastikan _Trait_ kosong
 4. Klik `Train and validate`
 
-![alt text](./assets/gif/train-app.gif "Mentrain App")
+![alt text](./assets/gif/train-app.gif 'Mentrain App')
 
-Kita dapat mentrain aplikasi wit dengan frasa yang lainnya, Ini dapat membuat model dari aplikasi wit kita semakin natural dan dapat mendeteksi Intens dari frasa yang lainnya. Contoh : 
+Kita dapat men-_train_ aplikasi wit dengan frasa lainnya. Ini dapat membuat model dari aplikasi wit kita semakin natural dan dapat mendeteksi intens dari frasa yang lainnya. Contoh :
+
 - Ambil statistik pompa
 - Pompa nyalakan
 - Pompa matikan
 
-Lakukan proses serupa seperti di atas dan pastikan hasil output sudah valid setelah itu lakukan proses train.
-#### Membuat konektor wit pada aplikasi
-Buat *file* `wit.ts` di dalam folder `./src/backend/`
-file ini kita buat sebagai konektor Gerbang API agar bisa memanggil Aplikasi Wit yang telah kita buat sebelumnya.
+Lakukan proses serupa seperti di atas dan pastikan hasil _output_ sudah valid setelah itu lakukan proses _train_.
+
+#### Membuat konektor wit pada Aplikasi
+
+Buat _file_ `wit.ts` di dalam folder `./src/backend/`.
+_File_ ini kita buat sebagai konektor Gerbang API agar bisa memanggil Aplikasi Wit yang telah kita buat sebelumnya.
+
 ```typescript
 // wit.ts
-import {Wit} from 'node-wit';
+import { Wit } from 'node-wit';
 import config from './config';
 
 const client = new Wit({
-    accessToken: config.witToken,
-})
+  accessToken: config.witToken,
+});
 
 const get = async (message: string) => {
-    try {
-        const data = await client.message(message,{});
-        return data;
-    } catch (error) {
-        return error;
-    }
-}
+  try {
+    const data = await client.message(message, {});
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
 
 export default {
-    get
-}
+  get,
+};
 ```
-Di *file* ini kita mempunya 1 fungsi `get(message)` yang digunakan untuk men*request message text* ke dalam aplikasi Wit kita, fungsi ini akan mengembalikan *response* dari wit.ai yang berisi **Text, Inten, Trait & Entity** yang mana tiap bagiannya memiliki bobot `confidence` sebagai patokan apakah prediksi NLP tersebut kuat atau tidak.
 
-##### Memperbaharui *file* configurasi
-Untuk mendapatkan token wit dari aplikasi kita dapat membuka menu **MyApps** > **[Nama aplikasi Wit]** > **Management** > **Setting** > **Server Access Token**.
+Di _file_ ini kita mempunyai sebuah fungsi `get(message)` yang digunakan untuk me-_request message text_ ke dalam aplikasi Wit kita. Fungsi ini akan mengembalikan _response_ dari wit.ai yang berisi **Text, Inten, Trait & Entity** yang setiap bagiannya memiliki bobot `confidence` sebagai patokan apakah prediksi NLP tersebut kuat atau tidak.
+
+##### Memperbaharui _file_ Konfigurasi
+
+Untuk mendapatkan token wit dari aplikasi, kita dapat membuka menu **MyApps** > **[Nama aplikasi Wit]** > **Management** > **Setting** > **Server Access Token**.
+
 ```
 # .env
 WIT_TOKEN= <Your wit token>
@@ -302,142 +329,150 @@ WIT_TOKEN= <Your wit token>
 
 ## Membuat Gerbang API
 
-Gerbang API akan digunakan sebagai perantara antara aplikasi Dasbor, Wit.ai, MQTT & MongoDB. Disini kita menggunakan REST API untuk berkomunikasi dengan aplikasi *frontend*.
+Gerbang API akan digunakan sebagai perantara antara aplikasi Dasbor, Wit.ai, MQTT & MongoDB. Di sini kita menggunakan REST API untuk berkomunikasi dengan aplikasi _frontend_.
 
 ### Membuat konektor MongoDB
-Disini kita membuat konektor MongoDB yang nantinya akan digunakan aplikasi kita untuk menyimpan data-data riwayat dari statistik perangkat IoT. Kita membuat *file* `mongo.ts` di dalam folder `src/backend`
+
+Di sini kita membuat konektor MongoDB yang nantinya akan digunakan pada aplikasi kita untuk menyimpan data-data riwayat dari statistik perangkat IoT. Kita membuat _file_ `mongo.ts` di dalam folder `src/backend`
+
 ```typescript
 // mongo.ts
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 import config from './config';
 
-const { Schema,model,connect } = mongoose;
+const { Schema, model, connect } = mongoose;
 
 const init = () => {
-    connect(config.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true})
-}
+  connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+};
 
 const sensorSchema = new Schema({
-    deviceName: String,
-    payload: Object,
-    date: { type: Date, default: Date.now }
-})
+  deviceName: String,
+  payload: Object,
+  date: { type: Date, default: Date.now },
+});
 
-const sensorModel = model('sensor',sensorSchema)
+const sensorModel = model('sensor', sensorSchema);
 
 export default {
-    init,
-    sensorModel
-}
+  init,
+  sensorModel,
+};
 ```
 
-Konektor ini berisikan skema dari data yang nantinya akan kita simpan dan fungsi `init()` yang nantinya akan digunakan untuk menginisiasi koneksi kedalam MongoDB.
-
+Konektor ini berisi skema dari data yang nantinya akan kita simpan dan fungsi `init()` yang nantinya akan digunakan untuk menginisiasi koneksi ke dalam MongoDB.
 
 ### Membuat konektor MQTT
-Dalam berkomunikasi dengan perangkat IoT via Gerbang API, kita menggunakan protokol MQTT (TCP). Alasan utama kenapa kita menggunakan ini agar aplikasi kita dapat menangani *request* secara asinkronus dan tidak memblok proses yang lain. Selain itu juga karena protokol ini memang umum digunakan untuk berkomunikasi dengan perangkat IoT. 
 
-Untuk membuat konektornya, kita buat *file* `mqtt.ts` di dalam direktori `/src/backend/`
+Dalam berkomunikasi dengan perangkat IoT via Gerbang API, kita menggunakan protokol MQTT (TCP). Alasan utama kita menggunakan ini adalah supaya aplikasi kita dapat menangani _request_ secara asinkronus dan tidak memblok proses yang lain. Selain itu juga karena protokol ini memang umum digunakan untuk berkomunikasi dengan perangkat IoT.
+
+Untuk membuat konektornya, kita buat _file_ `mqtt.ts` di dalam direktori `/src/backend/`
+
 ```typescript
 // mqtt.ts
-import Mqtt from "mqtt";
-import mongo from "./mongo";
+import Mqtt from 'mqtt';
+import mongo from './mongo';
 import config from './config';
 
-const client = Mqtt.connect(config.mqttURI,{
-    queueQoSZero:false
-})
-  
-const pub = (topic:string, message: any) => {
-    client.publish(topic,message,{qos:2})
-}
+const client = Mqtt.connect(config.mqttURI, {
+  queueQoSZero: false,
+});
 
-const sub = (topic:string) => {
-    client.subscribe(topic,{qos:2})
-}
+const pub = (topic: string, message: any) => {
+  client.publish(topic, message, { qos: 2 });
+};
+
+const sub = (topic: string) => {
+  client.subscribe(topic, { qos: 2 });
+};
 
 client.on('message', (topic, message) => {
-    if (topic == 'pompa-report') {
-        const payload = JSON.parse(message.toString())
-        
-        if(payload.kind == "pompa-stats") {
+  if (topic == 'pompa-report') {
+    const payload = JSON.parse(message.toString());
 
-            const sensor = new mongo.sensorModel({
-            deviceName: payload['deviceName'],
-            payload: {
-                hum:payload["humidity"],
-                temp:payload["temperature"] 
-                }    
-            })
+    if (payload.kind == 'pompa-stats') {
+      const sensor = new mongo.sensorModel({
+        deviceName: payload['deviceName'],
+        payload: {
+          hum: payload['humidity'],
+          temp: payload['temperature'],
+        },
+      });
 
-            pub("web",JSON.stringify({
-                humidity:payload.humidity,
-                temp:payload.temperature,
-                date: Date.now()
-            }))
-            
-            sensor.save()
-        }
+      pub(
+        'web',
+        JSON.stringify({
+          humidity: payload.humidity,
+          temp: payload.temperature,
+          date: Date.now(),
+        })
+      );
+
+      sensor.save();
     }
-})
+  }
+});
 
 export default {
-    pub,
-    sub
-}
+  pub,
+  sub,
+};
 ```
-Kode di atas secara garis besar membungkus fungsi `publish` dan `subscribe` yang ada pada `mqtt.client` agar dapat digunakan dengan mudah oleh modul lain. 
 
-Disini kita juga menangani pesan yang masuk dari perangkat IoT, pesan laporan yang masuk dengan jenis `pompa-stats` akan dimasukan ke dalam basis data MongoDB. 
-Setelah itu, isi payload yang berisi statistik perangkat akan dilanjutkan untuk dikirim ke Dasbor (*Frontend*) lewat MQTT Dengan topik `web`
+Kode di atas secara garis besar membungkus fungsi `publish` dan `subscribe` yang ada pada `mqtt.client` agar dapat digunakan dengan mudah oleh modul lain.
 
-### Membuat kontroler aplikasi
-File kontroler ini akan bertugas untuk menentukan apakah hasil prediksi dari aplikasi Wit yang kita buat presisi atau tidak. Disini kita mengatur batas skor `confidence` yang harus dipenuhi adalah `0.90` agar hasil yang didapatkan sesuai dengan ekspetasi, jika kurang dari itu maka hasil prediksi tidak bisa digunakan.
+Di sini kita juga menangani pesan yang masuk dari perangkat IoT, pesan laporan yang masuk dengan jenis `pompa-stats` akan dimasukkan ke dalam basis data MongoDB.
+Setelah itu, isi _payload_ yang berisi statistik perangkat akan dilanjutkan untuk dikirim ke Dasbor (_Frontend_) lewat MQTT Dengan topik `web`
 
-Buat *file* `controller.ts` di dalam direktori `./src/backend/`
+### Membuat Kontroler Aplikasi
+
+_File_ kontroler ini bertugas untuk menentukan apakah hasil prediksi dari aplikasi Wit yang kita buat presisi atau tidak. Di sini kita mengatur batas skor `confidence` yang harus dipenuhi adalah `0.90` agar hasil yang didapatkan sesuai dengan ekspektasi. Jika kurang dari itu, maka hasil prediksi tidak bisa digunakan.
+
+Buat _file_ `controller.ts` di dalam direktori `./src/backend/`
+
 ```typescript
 // controller.ts
-import Mqtt from './mqtt'
+import Mqtt from './mqtt';
 
+const execute = (payload: any) => {
+  const { intents, entities, traits } = payload;
 
-const execute = (payload:any) => {
+  const intent = intents
+    .filter((i: any) => i.confidence > 0.9)
+    .map((i: any) => i.name);
 
-    const {intents, entities, traits} = payload;
-    
-    const intent = intents
-        .filter((i:any) => i.confidence > 0.90)
-        .map((i:any) => i.name)    
+  const entity = entities['device:device']
+    .filter((device: any) => device.confidence > 0.9)
+    .map((d: any) => d.value);
 
-    const entity = entities["device:device"]
-        .filter((device:any) => (device.confidence > 0.90))
-        .map((d:any) =>  d.value)
-        
-    if(intent[0] == "set_device"){
-        const trait = traits["wit$on_off"]
-            .filter((t:any) => t.confidence > 0.90)
-            .map((obj:any) => obj.value)
+  if (intent[0] == 'set_device') {
+    const trait = traits['wit$on_off']
+      .filter((t: any) => t.confidence > 0.9)
+      .map((obj: any) => obj.value);
 
-        const status = trait[0] == "on" ? "1" : "0"
-        Mqtt.pub(entity[0],status)
-    }else if(intent[0] == "get_device") {
-        Mqtt.pub("pompa-stats","1")
-    }else{
-        console.log("not found")
-    }
-}
+    const status = trait[0] == 'on' ? '1' : '0';
+    Mqtt.pub(entity[0], status);
+  } else if (intent[0] == 'get_device') {
+    Mqtt.pub('pompa-stats', '1');
+  } else {
+    console.log('not found');
+  }
+};
 
 export default {
-    execute
-}
+  execute,
+};
 ```
-Fungsi `execute` akan memastikan *Intent* dari *payload*, jika *Intent* tersebut adalah `set_device` maka sebuah pesan akan dipublish melalui MQTT dengan tujuan nama perangkat tersebut yang berisi pesan *Traits* (On/Off), jika *Intent* tersebut adalah `get_device` maka sebuah pesan akan dipublish melalui MQTT dengan tujuan `pompa-stats` yang berisi pesan `1` (Untuk memantik sensor). 
 
-Fungsi `execute` akan diekspor dan nantinya akan dipanggil dari *entrypoint* Gerbang API.
+Fungsi `execute` akan memastikan _Intent_ dari _payload_. Jika _Intent_ tersebut adalah `set_device` maka sebuah pesan akan di-_publish_ melalui MQTT dengan tujuan nama perangkat tersebut yang berisi pesan _Traits_ (On/Off). Jika _Intent_ tersebut adalah `get_device`, maka sebuah pesan akan dipublish melalui MQTT dengan tujuan `pompa-stats` yang berisi pesan `1` (Untuk memantik sensor).
+
+Fungsi `execute` akan diekspor dan nantinya akan dipanggil dari _entrypoint_ Gerbang API.
 
 ### Membuat Rest API untuk Gerbang API
-Kita akan menggunakan REST sebagai API. Tak hanya untuk menyediakan *endpoint* untuk backend, disini kita juga menggunakanya untuk menserve aplikasi dasbor (*Frontend*)
 
-Buat *file* `app.ts` di dalam direktori  `./src/backend/`
+Kita akan menggunakan REST sebagai API. Tak hanya untuk menyediakan _endpoint_ untuk _backend_, disini kita juga menggunakanya untuk men-_serve_ aplikasi dasbor (_Frontend_)
+
+Buat _file_ `app.ts` di dalam direktori `./src/backend/`
 
 ```typescript
 //app.ts
@@ -450,282 +485,310 @@ import bp from 'body-parser';
 import path from 'path';
 import config from './config';
 
-
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
 
-app.use(cors())
-app.use(bp.json())
-app.get('/', async (req,res) => {
-    res.send('This app is running properly')
-})
-app.get('/dashboard', (req,res) => {
-    res.sendFile(path.join(__dirname , '../frontend' ,'index.html'))
-})
-app.post('/send', async (req,res) => {
-    const {message} = req.body
-    const payload = await wit.get(message)
-    console.log(payload)
-    controller.execute(payload)
-    
-    res.send("ok")
-})
+app.use(cors());
+app.use(bp.json());
+app.get('/', async (req, res) => {
+  res.send('This app is running properly');
+});
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+});
+app.post('/send', async (req, res) => {
+  const { message } = req.body;
+  const payload = await wit.get(message);
+  console.log(payload);
+  controller.execute(payload);
 
-app.get('/sensor-data', async (req,res) => {
-    try {
-        const data = await mongo.sensorModel
-        .find({})
-        .limit(5)
-        .sort({'date': -1})
+  res.send('ok');
+});
 
-        res.status(200).json(data)
-    } catch (error) {
-        res.status(400).json({msg:"Error"})
-    }
-})
+app.get('/sensor-data', async (req, res) => {
+  try {
+    const data = await mongo.sensorModel.find({}).limit(5).sort({ date: -1 });
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({ msg: 'Error' });
+  }
+});
 app.listen(config.port, () => {
-    mongo.init()
-    mqtt.sub("pompa-report")
-    console.log(`This app runs on ${config.port}`)
-})
+  mongo.init();
+  mqtt.sub('pompa-report');
+  console.log(`This app runs on ${config.port}`);
+});
 ```
-Disini kita mempunyai 4 *Endpoint*, yaitu:
+
+Disini kita mempunyai 4 _Endpoint_, yaitu:
 
 1. `GET /`
-*Endpoint* ini digunakan untuk mengecek apakah Aplikasi Gerbang API kita sudah berjalan & dapat diakses. 
+   _Endpoint_ ini digunakan untuk mengecek apakah Aplikasi Gerbang API kita sudah berjalan dan dapat diakses.
 2. `GET /dashboard`
-*Endpoint* ini digunakan untuk menampilkan *file* `frontend/index.html` yang berisi aplikasi Dasbor (*frontend*).
-3. `POST /send` 
-*Endpoint* ini digunakan untuk menerima *payload* berupa *text* dari aplikasi *frontend*, *text* ini merupakan hasil dari pengolahan API `SpeechRecognition`. Setelah itu *text* tersebut akan digunakan sebagai parameter pesan yang dikirimkan ke dalam aplikasi Wit. Hasil dari pemorsesan dari proses tersebut akan diteruskan ke dalam kontroller yang nantinya akan menentukan eksekusi apa yang akan dilakukan. 
+   _Endpoint_ ini digunakan untuk menampilkan _file_ `frontend/index.html` yang berisi Aplikasi Dasbor (_frontend_).
+3. `POST /send`
+   _Endpoint_ ini digunakan untuk menerima _payload_ berupa _text_ dari aplikasi _frontend_, _text_ ini merupakan hasil pengolahan API `SpeechRecognition`. Setelah itu, _text_ tersebut akan digunakan sebagai parameter pesan yang dikirimkan ke dalam aplikasi Wit. Hasil pemrosesan dari proses tersebut akan diteruskan ke dalam kontroller yang nantinya akan menentukan eksekusi apa yang akan dilakukan.
 4. `GET /sensor-data`
-*Endpoint* ini digunakan untuk menampilkan 5 data terakhir dari sensor pada perangkat IoT kita. Ini digunakan sebagai data awal di dalam aplikasi Dasbor
+   _Endpoint_ ini digunakan untuk menampilkan 5 data terakhir dari sensor pada perangkat IoT kita. Ini digunakan sebagai data awal di dalam aplikasi Dasbor.
 
-Aplikasi ini akan jalan di atas port yang kita deklarasikan di dalam *file* `.env`
+Aplikasi ini akan dijalankan di _port_ yang telah dideklarasikan di dalam _file_ `.env`
 
-## Membuat Dasbor (*Frontend*)
-Agar dapat menggunakan aplikasi ini dengan mudah, maka disini kita membuat Dasbor(*Interface*/**) agar penggunaanya dapat lebih mudah. 
-Aplikasi Dasbor ini akan meneruskan permintaan dari pengguna ke Gerbang API lewat panggilan HTTP, untuk menerima data menggunakan Websocket & HTTP.
-Disini Kita menggunakan single *file* `index.html`, library css yang kita gunakan adalah Bootstrap 4 dan untuk menerima pesan MQTT(Websocket) kita menggunakan library `paho-mqtt`. 
+## Membuat Dasbor (_Frontend_)
 
-Buat *file* `index.html` di dalam direktori `./src/`
+Agar dapat menggunakan aplikasi ini dengan mudah, maka di sini kita membuat Dasbor(_Interface_/\**).
+Aplikasi Dasbor ini akan meneruskan permintaan dari pengguna ke Gerbang API melalui panggilan HTTP untuk menerima data menggunakan Websocket & HTTP.
+Disini kita menggunakan *single\* \*file\* `index.html`, _library_ css yang kita gunakan adalah Bootstrap 4, dan untuk menerima pesan MQTT(Websocket) kita menggunakan _library_ `paho-mqtt`.
+
+Buat _file_ `index.html` di dalam direktori `./src/`
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <meta name="author" content="Aurelio De Rosa">
-      <title>Dasbor</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-      <style>
-         .recognition-options
-         {
-            list-style: none;
-            padding: 0;
-         }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Aurelio De Rosa" />
+    <title>Dasbor</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <style>
+      .recognition-options {
+        list-style: none;
+        padding: 0;
+      }
 
-         .recognition-options li
-         {
-            display: inline;
-         }
+      .recognition-options li {
+        display: inline;
+      }
 
-         fieldset
-         {
-            border: 0;
-            margin: 0.5em 0;
-            padding: 0;
-         }
+      fieldset {
+        border: 0;
+        margin: 0.5em 0;
+        padding: 0;
+      }
 
-         legend
-         {
-            padding: 0;
-         }
-         .fade-in {
-            opacity: 1;
-            animation-name: fadeInOpacity;
-            animation-iteration-count: 1;
-            animation-timing-function: ease-in;
-            animation-duration: 1s;
-         }
+      legend {
+        padding: 0;
+      }
+      .fade-in {
+        opacity: 1;
+        animation-name: fadeInOpacity;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 1s;
+      }
 
-         @keyframes fadeInOpacity {
-            0% {
-               opacity: 0;
-            }
-            100% {
-               opacity: 1;
-            }
-         }
-
-      </style>
-   </head>
-   <body>
+      @keyframes fadeInOpacity {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
     <div class="container">
-        <div class="jumbotron">
-      <h1 class="text-center">✨ Jarwis</h1>
-      <p><small>
-         Who need a Jarvis If we can build a jarwis *jk <br>
-         Build With ❤️  &nbsp; By Iqbal Syamil
-      </small></p>
-      <p hidden class="js-api-support">API not supported</p>
+      <div class="jumbotron">
+        <h1 class="text-center">✨ Jarwis</h1>
+        <p>
+          <small>
+            Who need a Jarvis If we can build a jarwis *jk <br />
+            Build With ❤️ &nbsp; By Iqbal Syamil
+          </small>
+        </p>
+        <p hidden class="js-api-support">API not supported</p>
 
-      <div class="js-api-info">
-         <div class="form-group">
-            <textarea class="form-control" placeholder="Transcription" style="resize: none" aria-label="Transcription" id="transcription" class="log" readonly></textarea>
-        </div>
+        <div class="js-api-info">
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              placeholder="Transcription"
+              style="resize: none"
+              aria-label="Transcription"
+              id="transcription"
+              class="log"
+              readonly
+            ></textarea>
+          </div>
 
-         <form action="" method="get">
-            <button type="button" id="button-play" class="button">Listen</button>
-         </form>
+          <form action="" method="get">
+            <button type="button" id="button-play" class="button">
+              Listen
+            </button>
+          </form>
 
-         <h2>Log</h2>
-         <div id="log" class="log"></div>
-        </div>
-        </div>
-        <div>
-           
-         <table id="sensor-table" class="table">
-            <thead>
-               <tr>
-                  <th>Date</th>
-                  <th>Humidity</th>
-                  <th>Temperature</th>
-               </tr>
-            </thead>
-            <tbody>
-            </tbody>
-         </table>
-
+          <h2>Log</h2>
+          <div id="log" class="log"></div>
         </div>
       </div>
+      <div>
+        <table id="sensor-table" class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Humidity</th>
+              <th>Temperature</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
 
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
-      <script>
-         const apiHost = "http://localhost:3000"; // host your api gateway i.e http://localhost:3000
-         var mqtt;
-         const mqttHost = "localhost"; // your mqtt host i.e. localhost
-         const mqttPort = 9001; // port mqqt (websocket) default = 9001
-         const dateLang = "id-ID" // dateLocale Format
-         const speechRecognitionLang = "ID" // language used in speechRecognition i.e "EN"
-         function mqttConnect() {
-            mqtt = new Paho.MQTT.Client(mqttHost, Number(mqttPort), "client-web");
-            mqtt.connect({onSuccess:onConnect});
-            mqtt.onConnectionLost = onConnectionLost;
-            mqtt.onMessageArrived = onMessageArrived;
-         }
-         
-         function onConnect() {
-            // Once a connection has been made, make a subscription and send a message.
-            mqtt.subscribe("web");
-         }
-         function onMessageArrived(message) {
-            const payload = JSON.parse(message.payloadString);
-            var tablerow = tableref.insertRow(0)
-            tablerow.className = 'fade-in'
-            tablerow.innerHTML = `<tr class=fade-in> <td>${new Date(payload.date).toLocaleString(dateLang)}</td> <td>${payload.humidity}</td> <td>${payload.temp}</td> </tr>`
-         }
-         function onConnectionLost(responseObject) {
-            if (responseObject.errorCode !== 0) {
-               console.log("onConnectionLost:"+responseObject.errorMessage);
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      const apiHost = 'http://localhost:3000'; // host your api gateway i.e http://localhost:3000
+      var mqtt;
+      const mqttHost = 'localhost'; // your mqtt host i.e. localhost
+      const mqttPort = 9001; // port mqqt (websocket) default = 9001
+      const dateLang = 'id-ID'; // dateLocale Format
+      const speechRecognitionLang = 'ID'; // language used in speechRecognition i.e "EN"
+      function mqttConnect() {
+        mqtt = new Paho.MQTT.Client(mqttHost, Number(mqttPort), 'client-web');
+        mqtt.connect({ onSuccess: onConnect });
+        mqtt.onConnectionLost = onConnectionLost;
+        mqtt.onMessageArrived = onMessageArrived;
+      }
+
+      function onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        mqtt.subscribe('web');
+      }
+      function onMessageArrived(message) {
+        const payload = JSON.parse(message.payloadString);
+        var tablerow = tableref.insertRow(0);
+        tablerow.className = 'fade-in';
+        tablerow.innerHTML = `<tr class=fade-in> <td>${new Date(
+          payload.date
+        ).toLocaleString(dateLang)}</td> <td>${payload.humidity}</td> <td>${
+          payload.temp
+        }</td> </tr>`;
+      }
+      function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+          console.log('onConnectionLost:' + responseObject.errorMessage);
+        }
+      }
+
+      function send(msg) {
+        const raw = JSON.stringify({ message: msg });
+        fetch(apiHost + '/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: raw,
+          redirect: 'follow',
+        })
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.log('error', error));
+      }
+      function logEvent(string) {
+        var log = document.getElementById('log');
+
+        log.innerHTML = string + '<br />' + log.innerHTML;
+      }
+
+      window.SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
+      if (!SpeechRecognition) {
+        document.querySelector('.js-api-support').removeAttribute('hidden');
+        document.querySelector('.js-api-info').setAttribute('hidden', '');
+        [].forEach.call(document.querySelectorAll('form button'), function (
+          button
+        ) {
+          button.setAttribute('disabled', '');
+        });
+      } else {
+        var recognizer = new SpeechRecognition();
+        var transcription = document.getElementById('transcription');
+
+        // Start recognising
+        recognizer.addEventListener('result', function (event) {
+          transcription.textContent = '';
+
+          for (var i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              send(event.results[i][0].transcript);
+              transcription.textContent =
+                event.results[i][0].transcript +
+                ' (Confidence: ' +
+                event.results[i][0].confidence +
+                ')';
+            } else {
+              transcription.textContent += event.results[i][0].transcript;
             }
-         }
-         
-         function send(msg) {
-            const raw = JSON.stringify({"message":msg});
-            fetch(apiHost+"/send", {
-               method: 'POST',
-               headers: {
-                  'Content-Type': 'application/json'
-               },
-               body: raw,
-               redirect: 'follow'
-            })
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));            
-         }
-         function logEvent(string) {
-            var log = document.getElementById('log');
-            
-            log.innerHTML = string + '<br />' + log.innerHTML;
-         }
-         
-         window.SpeechRecognition = window.SpeechRecognition        ||
-         window.webkitSpeechRecognition  ||
-         null;
-         
-         if (!SpeechRecognition) {
-            document.querySelector('.js-api-support').removeAttribute('hidden');
-            document.querySelector('.js-api-info').setAttribute('hidden', '');
-            [].forEach.call(document.querySelectorAll('form button'), function(button) {
-               button.setAttribute('disabled', '');
-            });
-         } else {
-            var recognizer = new SpeechRecognition();
-            var transcription = document.getElementById('transcription');
-            
-            // Start recognising
-            recognizer.addEventListener('result', function(event) {
-               transcription.textContent = '';
-               
-               for (var i = event.resultIndex; i < event.results.length; i++) {
-                  if (event.results[i].isFinal) {
-                     send(event.results[i][0].transcript)
-                     transcription.textContent = event.results[i][0].transcript +
-                     ' (Confidence: ' + event.results[i][0].confidence + ')';
-                  } else {
-                     transcription.textContent += event.results[i][0].transcript;
-                  }
-               }
-            });
-            
-            // Listen for errors
-            recognizer.addEventListener('error', function(event) {
-               logEvent('Recognition error: ' + event.message);
-            });
-            
-            recognizer.addEventListener('end', function() {
-               logEvent('Recognition ended');
-            });
-            
-            document.getElementById('button-play').addEventListener('click', function() {
-               document.getElementById('log').textContent = '';
-               
-               transcription.textContent = '';
-               
-               recognizer.lang = speechRecognitionLang
-               recognizer.continuous = !true;
-               recognizer.interimResults = true;
-               
-               try {
-                  recognizer.start();
-                  logEvent('Recognition started');
-               } catch(ex) {
-                  logEvent('Recognition error: ' + ex.message);
-               }
-            });
-            var tableref = document.getElementById('sensor-table').getElementsByTagName('tbody')[0];
-            document.addEventListener("DOMContentLoaded", function(event) {
-               fetch(apiHost+"/sensor-data")
-               .then(response => response.json())
-               .then(result => {
-                  result.forEach(res => {
-                     tableref.insertRow(tableref.rows.length).innerHTML = `<tr> <td>${new Date(res.date).toLocaleString("id-ID")}</td> <td>${res.payload.hum}</td> <td>${res.payload.temp}</td> </tr>`
-                  })
-               });
+          }
+        });
 
-               mqttConnect()
+        // Listen for errors
+        recognizer.addEventListener('error', function (event) {
+          logEvent('Recognition error: ' + event.message);
+        });
+
+        recognizer.addEventListener('end', function () {
+          logEvent('Recognition ended');
+        });
+
+        document
+          .getElementById('button-play')
+          .addEventListener('click', function () {
+            document.getElementById('log').textContent = '';
+
+            transcription.textContent = '';
+
+            recognizer.lang = speechRecognitionLang;
+            recognizer.continuous = !true;
+            recognizer.interimResults = true;
+
+            try {
+              recognizer.start();
+              logEvent('Recognition started');
+            } catch (ex) {
+              logEvent('Recognition error: ' + ex.message);
+            }
+          });
+        var tableref = document
+          .getElementById('sensor-table')
+          .getElementsByTagName('tbody')[0];
+        document.addEventListener('DOMContentLoaded', function (event) {
+          fetch(apiHost + '/sensor-data')
+            .then((response) => response.json())
+            .then((result) => {
+              result.forEach((res) => {
+                tableref.insertRow(
+                  tableref.rows.length
+                ).innerHTML = `<tr> <td>${new Date(res.date).toLocaleString(
+                  'id-ID'
+                )}</td> <td>${res.payload.hum}</td> <td>${
+                  res.payload.temp
+                }</td> </tr>`;
+              });
             });
 
-         }
-      </script>
-   </body>
+          mqttConnect();
+        });
+      }
+    </script>
+  </body>
 </html>
-
 ```
-#### Mengkonfigurasi Aplikasi *Frontend* 
-Ada hal yang perlu diperhatikan, pastikan konfigurasi pada aplikasi Dasbor sudah tepat, disini kita mendefinisikan beberapa hal, seperti alamat `apiHost`, alamat `mqqtHost`, port `mqttPort`, format tanggal `dateLang`, format bahasa yang digunakan pada *Speech Recognition* API `speechRecognitionLang` . 
+
+#### Mengkonfigurasi Aplikasi _Frontend_
+
+Ada hal yang perlu diperhatikan, yaitu memastikan bahwa konfigurasi pada aplikasi Dasbor sudah tepat. Di sini kita mendefinisikan beberapa hal, seperti alamat `apiHost`, alamat `mqqtHost`, _port_ `mqttPort`, format tanggal `dateLang`, dan format bahasa yang digunakan pada _Speech Recognition_ API `speechRecognitionLang` .
 
 ```js
          /* ... Kode Terpotong */
@@ -741,30 +804,37 @@ Ada hal yang perlu diperhatikan, pastikan konfigurasi pada aplikasi Dasbor sudah
 ```
 
 ## Mengatur Perangkat IoT
-Seperti pada bagian pendahuluan, tujuan dari perangkat IoT ini adalah agar kita dapat menyiram tanaman dengan menyalakan pompa. Jadi kita ingin membuat perangkat IoT Kita dapat melakukan 3 hal, yaitu: 
+
+Seperti pada bagian pendahuluan, tujuan dari perangkat IoT ini adalah agar kita dapat menyiram tanaman dengan menyalakan pompa. Jadi, kita ingin membuat perangkat IoT kita dapat melakukan 3 hal, yaitu:
+
 1. Menyalakan Pompa
 2. Mematikan Pompa
 3. Mengambil Data statistik pompa
 
-### Instalasi *Library*
-Disini kita menggunakan 3 library eksternal, pastikan kita sudah menginstall library tersebut di dalam arduino IDE. 
+### Instalasi _Library_
+
+Di sini kita menggunakan 3 _library_ eksternal. Pastikan kita sudah meng-_install_ _library_ tersebut di dalam arduino IDE.
+
 1. [PubSubClient.h](https://github.com/knolleary/pubsubclient)
 2. [ArduinoJson.h](https://github.com/ekstrand/ESP8266wifi)
 3. [DHTesp.h](https://github.com/beegee-tokyo/DHTesp)
-3. [ESP8266WiFi.h](https://github.com/ekstrand/ESP8266wifi)
-   
-### Gambaran Skema Perangkat IoT
-Dibawah ini merupakan gambaran skema dari perangkat IoT yang digunakan pada tulisan ini. Pastikan Pin yang digunakan sudah terkoneksi sesuai dengan skema. 
+4. [ESP8266WiFi.h](https://github.com/ekstrand/ESP8266wifi)
 
-![alt text](./assets/img/skema.png "Gambaran Skema Perangkat IoT")
-Catatan : 
+### Gambaran Skema Perangkat IoT
+
+Di bawah ini merupakan gambaran skema dari perangkat IoT yang digunakan pada tulisan ini. Pastikan pin yang digunakan sudah terkoneksi sesuai dengan skema.
+
+![alt text](./assets/img/skema.png 'Gambaran Skema Perangkat IoT')
+Catatan :
+
 - Garis Biru = Jalur sinyal digital/analog
-- Garis Hijau = Jalur arus + Positif 
+- Garis Hijau = Jalur arus + Positif
 - Garis Merah = Jalur arus - (Ground/GND)
 
-#### Meng*compile* kode pada perangkat IoT
+#### Meng-_compile_ Kode pada Perangkat IoT
 
-Gunakan kode dibawah ini untuk di*compile* pada perangkat IoT (NodeMCU ESP8266).
+Gunakan kode di bawah ini untuk di-_compile_ pada perangkat IoT (NodeMCU ESP8266).
+
 ```c++
 #define SerialMon Serial
 
@@ -834,7 +904,7 @@ void setup()
 
 void loop()
 {
-  
+
   if (!mqtt.connected()) {
       SerialMon.println("Trying Connecting to mqtt broker");
     if(mqttConnect()){
@@ -870,10 +940,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
     if(payload[0] == '1'){
       float humidity = dht.getHumidity();
       float temperature = dht.getTemperature();
-      
+
       doc["humidity"] = humidity;
       doc["temperature"] = temperature;
-      
+
       size_t n = serializeJson(doc,buffer);
       mqtt.publish("pompa-report",buffer,n);
     }
@@ -882,60 +952,70 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 ```
 
-Cara kerja dari program ini 
-1. Perangkat akan melakukan koneksi ke dalam WiFI yang sudah di definisikan.
-2. Setelah terkoneksi, perangkat akan melakukan koneksi ke MQTT Broker, mensubscribe topik perangkat, dan mempublish pesan ke topik report bahwa perangkat sudah terkoneksi.
+Cara kerja program ini:
+
+1. Perangkat akan melakukan koneksi ke dalam WiFI yang sudah didefinisikan.
+2. Setelah terkoneksi, perangkat akan melakukan koneksi ke MQTT Broker, men-_subscrib_e topik perangkat, dan mem-\_publish_ pesan ke topik _report_ bahwa perangkat sudah terkoneksi.
 3. Perangkat akan menunggu pesan masuk dari Gerbang API via protokol MQTT (TCP).
-4. Apabila ada pesan yang masuk dengan topik "pompa" / nama perangkat maka perangkat akan melakukan perintah untuk menyalakan/mematikan pompa berdasarkan data payload yang dikirim oleh Gerbang API. Setelah proses eksekusi telah dilakukan, statusnya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
-5. Apabila ada pesan yang masuk dengan topik "pompa-stats" maka perangkat akan mengambil data dari sensor DHT berupa Temperatur/*Temperature* dan Kelembabman / *Humidity* dan hasil nya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
+4. Apabila ada pesan yang masuk dengan topik "pompa" atau nama perangkat, maka perangkat akan melakukan perintah untuk menyalakan atau mematikan pompa berdasarkan data _payload_ yang dikirim oleh Gerbang API. Setelah proses eksekusi dilakukan, statusnya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
+5. Apabila ada pesan yang masuk dengan topik "pompa-stats", maka perangkat akan mengambil data dari sensor DHT berupa Temperatur/_Temperature_ dan Kelembabman/_Humidity_, dan hasil nya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
 
 ##### Mengkonfigurasi Perangkat IoT
-Lakukan Pengaturan pada perangkat IoT pada *file* `arduino/pompa.ino` dengan mengisi variable `ssid`, `password`, `broker`. 
+
+Lakukan pengaturan pada perangkat IoT pada _file_ `arduino/pompa.ino` dengan mengisi variable `ssid`, `password`, `broker`.
+
 ```c++
-// ... Kode Terpotong 
+// ... Kode Terpotong
 
 WiFiClient espClient;
 PubSubClient mqtt(espClient);
 const char* ssid     = "";     //  SSID (name) dari Wi-Fi
-const char* password = "";     //  Password Wi-Fi 
+const char* password = "";     //  Password Wi-Fi
 const char* broker = "";     // ip / domain dari mqtt broker. contoh (192.168.1.2)
 const char* deviceName = "pompa";      // nama perangkat
 StaticJsonDocument<250> wrapper;
 DHTesp dht;
 
-// ... Kode Terpotong 
+// ... Kode Terpotong
 
 ```
-Setelah semuanya sudah terkonfigurasi maka lakukan proses *compile* kode tersebut pada perangkat IoT.
 
+Setelah semuanya sudah terkonfigurasi, maka lakukan proses _compile_ kode tersebut pada perangkat IoT.
 
 ## Menjalankan Keseluruhan aplikasi
-### Gambaran Arsitektur
-Setelah kita melakukan beberapa step diatas, berikut ini adalah gambaran lengkap dari arsitektur yang digunakan di dalam proyek ini.
 
-![alt text](./assets/img/wit-ai-iot-arch.png "Gambaran Arsitektur")
+### Gambaran Arsitektur
+
+Setelah kita melakukan beberapa langkah di atas, berikut ini adalah gambaran lengkap dari arsitektur yang digunakan di dalam proyek ini.
+
+![alt text](./assets/img/wit-ai-iot-arch.png 'Gambaran Arsitektur')
 
 ### Jalankan Gerbang API, MongoDB Dan MQTT Broker
-Setelah seluruh konfigurasi selesai, jalankan perintah dibawah secara berurutan. 
+
+Setelah seluruh konfigurasi selesai, jalankan perintah di bawah secara berurutan.
+
 1. `docker-compose up` (untuk menjalankan layanan MQTT Broker & MongoDB)
 2. `npm run dev` (untuk menjalankan aplikasi dalam mode pengembangan)
 3. Hubungkan perangkat IoT dengan daya.
 4. Buka aplikasi Dasbor di url http://localhost:3000/dashboard
 
+## Ringkasan dan Penutup
 
-## Ringkasan & Penutup
-Selamat! teman-teman sudah berhasil untuk membuat proyek untuk mengkontrol perangkat IoT. Di tulisan kali ini kita sudah belajar banyak hal seperti Bagaimana cara kerja dari NLP, Bagaimana caranya kita berkomunikasi dengan perangkat IoT, dll. Semoga apa yang sudah dipelajari dapat bermanfaat & bisa dikembangkan menjadi hal yang lebih keren lagi ! 😁 
+Selamat! teman-teman sudah berhasil membuat proyek untuk mengkontrol perangkat IoT. Di tulisan kali ini kita sudah belajar banyak hal seperti bagaimana cara kerja NLP, bagaimana caranya kita berkomunikasi dengan perangkat IoT, dll. Semoga apa yang sudah dipelajari dapat bermanfaat dan bisa dikembangkan menjadi hal yang lebih keren lagi! 😁
 
-Kode seluruh proyek ini dapat diakses [disini](https://github.com/2pai/wit-iot/) 
+Kode seluruh proyek ini dapat diakses [disini](https://github.com/2pai/wit-iot/)
 
 ### Apa Selanjutnya?
-Aplikasi ini masih belum sempurna, Jika teman-teman tertarik untuk mengembangkan ada beberapa ide seperti :
-- Mengatur perangkat (Menambahkan, Menghapus, Mengedit)
-- Menvisualisasikan perangkat yang aktif/tidak aktif
-- Membuat versi Aplikasi *Mobile*
-- Dan lain-lain
+
+Aplikasi ini masih belum sempurna. Jika teman-teman tertarik untuk mengembangkan, ada beberapa ide seperti:
+
+- Mengatur perangkat (menambahkan, menghapus, dan mengedit)
+- Memvisualisasikan perangkat yang aktif maupun tidak aktif
+- Membuat versi aplikasi _mobile_
+- dll
 
 ### Referensi
+
 - https://medium.com/wit-ai/build-an-interactive-voice-enabled-android-app-with-wit-ai-6f6d72cf94be
 - https://github.com/AurelioDeRosa/HTML5-API-demos/blob/master/demos/web-speech-api-demo.html
 - https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
