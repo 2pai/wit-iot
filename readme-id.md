@@ -107,12 +107,12 @@ Untuk dapat menjalankan keseluruhan bagian aplikasi, ada beberapa hal yang perlu
 
 - _Browser_ yang mensupport API `SpeechRecognition`
 - Docker & Docker-Compose
-- NodeJS, NPM & Typescript
+- NodeJS, NPM & TypeScript
 - Arduino IDE
 
 ## Mempersiapkan Lingkungan Pengembangan Aplikasi
 
-Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplikasi. Di sini kita menggunakan [typescript](https://www.typescriptlang.org/) dan [npm](https://www.npmjs.com) untuk pengembangan aplikasi kita. Pastikan Typescript sudah ter-_install_. Jika belum, maka jalankan perintah `npm install -g typescript` untuk meng-_install_ typescript.
+Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplikasi. Di sini kita menggunakan [TypeScript](https://www.typescriptlang.org/) dan [npm](https://www.npmjs.com) untuk pengembangan aplikasi kita. Pastikan TypeScript sudah ter-_install_. Jika belum, maka jalankan perintah `npm install -g typescript` untuk meng-_install_ TypeScript.
 
 ```json
 // tsconfig.json
@@ -131,7 +131,7 @@ Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplik
 }
 ```
 
-Lakukan Konfigurasi _compiler_ typescript dengan membuat _file_ `tsconfig.json` yang berisi JSON _file_ di atas.
+Lakukan Konfigurasi _compiler_ TypeScript dengan membuat _file_ `tsconfig.json` yang berisi JSON _file_ di atas.
 
 ```json
 // package.json
