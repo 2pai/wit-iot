@@ -1,6 +1,6 @@
 <!-- # Smart assistant with wit.ai for IoT -->
 
-# Membuat Asisten Pintar dengan wit.ai untuk Mengatur Perangkat IoT
+# Membuat Asisten Pintar dengan Wit.ai untuk Mengatur Perangkat IoT
 
 ## Pengantar
 
@@ -16,7 +16,7 @@ Hari ini kita akan membuat aplikasi asisten personal dengan tujuan untuk mengont
 
 ## Daftar isi
 
-- [Membuat Asisten Pintar dengan wit.ai untuk Mengatur Perangkat IoT](#membuat-asisten-pintar-dengan-witai-untuk-mengatur-perangkat-iot)
+- [Membuat Asisten Pintar dengan Wit.ai untuk Mengatur Perangkat IoT](#membuat-asisten-pintar-dengan-witai-untuk-mengatur-perangkat-iot)
   - [Pengantar](#pengantar)
     - [Apa itu NLP ?](#apa-itu-nlp-)
     - [Tujuan](#tujuan)
@@ -107,12 +107,12 @@ Untuk dapat menjalankan keseluruhan bagian aplikasi, ada beberapa hal yang perlu
 
 - _Browser_ yang mensupport API `SpeechRecognition`
 - Docker & Docker-Compose
-- NodeJS, NPM & Typescript
+- NodeJS, NPM & TypeScript
 - Arduino IDE
 
 ## Mempersiapkan Lingkungan Pengembangan Aplikasi
 
-Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplikasi. Di sini kita menggunakan [typescript](https://www.typescriptlang.org/) dan [npm](https://www.npmjs.com) untuk pengembangan aplikasi kita. Pastikan Typescript sudah ter-_install_. Jika belum, maka jalankan perintah `npm install -g typescript` untuk meng-_install_ typescript.
+Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplikasi. Di sini kita menggunakan [TypeScript](https://www.typescriptlang.org/) dan [NPM](https://www.npmjs.com) untuk pengembangan aplikasi kita. Pastikan TypeScript sudah ter-_install_. Jika belum, maka jalankan perintah `npm install -g typescript` untuk meng-_install_ TypeScript.
 
 ```json
 // tsconfig.json
@@ -131,7 +131,7 @@ Hal pertama yang kita lakukan adalah mempersiapkan lingkungan pengembangan aplik
 }
 ```
 
-Lakukan Konfigurasi _compiler_ typescript dengan membuat _file_ `tsconfig.json` yang berisi JSON _file_ di atas.
+Lakukan konfigurasi _compiler_ TypeScript dengan membuat _file_ `tsconfig.json` yang berisi JSON _file_ di atas.
 
 ```json
 // package.json
@@ -171,11 +171,11 @@ Lakukan Konfigurasi _compiler_ typescript dengan membuat _file_ `tsconfig.json` 
 }
 ```
 
-Lakukan instalasi _package_ yang akan digunakan pada aplikasi kita dengan membuat _file_ `package.json` yang berisi JSON _file_ di atas.
+Lakukan instalasi _package_ yang akan digunakan pada aplikasi kita dengan membuat _file_ `package.json` yang berisi _file_ JSON di atas.
 
 ### Menyiapkan MQTT Broker & MongoDB
 
-Kita juga akan menggunakan MQTT Broker(Mosquitto) & basis data (MongoDB). Alih-alih meng-_install_-nya di _local_/langsung di perangkat yang kita gunakan, kita akan menggunakan Docker untuk menjalankan layanan tersebut.
+Kita juga akan menggunakan broker MQTT (Mosquitto) & basis data (MongoDB). Alih-alih meng-_install_-nya di _local_/langsung di perangkat yang kita gunakan, kita akan menggunakan Docker untuk menjalankan layanan tersebut.
 
 ```yaml
 # Docker-compose.yml
@@ -198,7 +198,7 @@ services:
       - 27017:27017
 ```
 
-Untuk mengaktifkan protokol Websocket di dalam MQTT broker, kita dapat mengatur konfigurasi _file_ dengan membuat _file_ `./conf/mosquitto.conf` yang nantinya akan berjalan pada PORT 9001.
+Untuk mengaktifkan protokol WebSocket di dalam broker MQTT, kita dapat mengatur konfigurasi _file_ dengan membuat _file_ `./conf/mosquitto.conf` yang nantinya akan berjalan pada _port_ 9001.
 
 ```
 
@@ -243,14 +243,14 @@ Setelah semuanya selesai, kita dapat mulai mengembangkan aplikasi.
 
 ## Melatih Aplikasi Wit untuk Melakukan Pemrosesan Bahasa Natural (NLP)
 
-Di sini kita menggunakan [wit.ai](https://wit.ai/) sebagai NLP sistem kita. Dengan ini, kita dapat membuat asisten personal yang kita buat se-natural mungkin dan tidak perlu _membuat machine learning model_ dengan _library_ seperti PyTorch, Tensorflow, dll untuk aplikasi kita.
+Di sini kita menggunakan [Wit.ai](https://wit.ai/) sebagai NLP sistem kita. Dengan ini, kita dapat membuat asisten personal yang kita buat se-natural mungkin dan tidak perlu _membuat machine learning model_ dengan _library_ seperti PyTorch atau TensorFlow untuk aplikasi kita.
 
-Pada bagian ini kita ingin mencoba untuk melatih aplikasi wit agar dapat mengenali beberapa perintah seperti `set_device` dan `get_device` pada perangkat IoT kita.
+Pada bagian ini kita ingin mencoba untuk melatih aplikasi Wit agar dapat mengenali beberapa perintah seperti `set_device` dan `get_device` pada perangkat IoT kita.
 
 #### Membuat Aplikasi Wit
 
 1. Buka Wit.ai dan masuk dengan menggunakan akun Facebook
-2. Buat aplikasi wit
+2. Buat aplikasi Wit
 3. Masukan nama aplikasi, bahasa yang digunakan, dan jenis _visibility_.
 4. Klik `Create`
 
@@ -268,7 +268,7 @@ Pada bagian ini kita ingin mencoba untuk melatih aplikasi wit agar dapat mengena
 ##### Mematikan Pompa
 
 1. Masukkan kata `matikan pompa` kedalam _form_ `Utterance`
-2. Set **Intent** = `setdevice` , **Entity** device = `pompa` , dan `wit/on_off` = `off`
+2. Atur **Intent** = `setdevice` , **Entity** device = `pompa` , dan `wit/on_off` = `off`
 3. Klik `Train and validate`
 
 ##### Mengambil Data Pompa
@@ -280,7 +280,7 @@ Pada bagian ini kita ingin mencoba untuk melatih aplikasi wit agar dapat mengena
 
 ![alt text](./assets/gif/train-app.gif 'Mentrain App')
 
-Kita dapat men-_train_ aplikasi wit dengan frasa lainnya. Ini dapat membuat model dari aplikasi wit kita semakin natural dan dapat mendeteksi intens dari frasa yang lainnya. Contoh :
+Kita dapat latih aplikasi Wit dengan frasa lainnya. Ini dapat membuat model dari aplikasi Wit kita semakin natural dan dapat mendeteksi intens dari frasa yang lainnya. Contoh :
 
 - Ambil statistik pompa
 - Pompa nyalakan
@@ -288,10 +288,10 @@ Kita dapat men-_train_ aplikasi wit dengan frasa lainnya. Ini dapat membuat mode
 
 Lakukan proses serupa seperti di atas dan pastikan hasil _output_ sudah valid setelah itu lakukan proses _train_.
 
-#### Membuat konektor wit pada Aplikasi
+#### Membuat konektor Wit pada Aplikasi
 
 Buat _file_ `wit.ts` di dalam folder `./src/backend/`.
-_File_ ini kita buat sebagai konektor Gerbang API agar bisa memanggil Aplikasi Wit yang telah kita buat sebelumnya.
+_File_ ini kita buat sebagai konektor gerbang API agar bisa memanggil Aplikasi Wit yang telah kita buat sebelumnya.
 
 ```typescript
 // wit.ts
@@ -316,7 +316,7 @@ export default {
 };
 ```
 
-Di _file_ ini kita mempunyai sebuah fungsi `get(message)` yang digunakan untuk me-_request message text_ ke dalam aplikasi Wit kita. Fungsi ini akan mengembalikan _response_ dari wit.ai yang berisi **Text, Inten, Trait & Entity** yang setiap bagiannya memiliki bobot `confidence` sebagai patokan apakah prediksi NLP tersebut kuat atau tidak.
+Di _file_ ini kita mempunyai sebuah fungsi `get(message)` yang digunakan untuk me-_request message text_ ke dalam aplikasi Wit kita. Fungsi ini akan mengembalikan _response_ dari Wit.ai yang berisi **Text, Inten, Trait & Entity** yang setiap bagiannya memiliki bobot `confidence` sebagai patokan apakah prediksi NLP tersebut kuat atau tidak.
 
 ##### Memperbaharui _file_ Konfigurasi
 
@@ -364,7 +364,7 @@ Konektor ini berisi skema dari data yang nantinya akan kita simpan dan fungsi `i
 
 ### Membuat konektor MQTT
 
-Dalam berkomunikasi dengan perangkat IoT via Gerbang API, kita menggunakan protokol MQTT (TCP). Alasan utama kita menggunakan ini adalah supaya aplikasi kita dapat menangani _request_ secara asinkronus dan tidak memblok proses yang lain. Selain itu juga karena protokol ini memang umum digunakan untuk berkomunikasi dengan perangkat IoT.
+Dalam berkomunikasi dengan perangkat IoT melalui gerbang API, kita menggunakan protokol MQTT (TCP). Alasan utama kita menggunakan ini adalah supaya aplikasi kita dapat menangani _request_ secara asinkronus dan tidak memblok proses yang lain. Selain itu juga karena protokol ini memang umum digunakan untuk berkomunikasi dengan perangkat IoT.
 
 Untuk membuat konektornya, kita buat _file_ `mqtt.ts` di dalam direktori `/src/backend/`
 
@@ -464,9 +464,9 @@ export default {
 };
 ```
 
-Fungsi `execute` akan memastikan _Intent_ dari _payload_. Jika _Intent_ tersebut adalah `set_device` maka sebuah pesan akan di-_publish_ melalui MQTT dengan tujuan nama perangkat tersebut yang berisi pesan _Traits_ (On/Off). Jika _Intent_ tersebut adalah `get_device`, maka sebuah pesan akan dipublish melalui MQTT dengan tujuan `pompa-stats` yang berisi pesan `1` (Untuk memantik sensor).
+Fungsi `execute` akan memastikan _Intent_ dari _payload_. Jika _Intent_ tersebut adalah `set_device` maka sebuah pesan akan di-_publish_ melalui MQTT dengan tujuan nama perangkat tersebut yang berisi pesan _Traits_ (On/Off). Jika _Intent_ tersebut adalah `get_device`, maka sebuah pesan akan di-_publish_ melalui MQTT dengan tujuan `pompa-stats` yang berisi pesan `1` (Untuk memantik sensor).
 
-Fungsi `execute` akan diekspor dan nantinya akan dipanggil dari _entrypoint_ Gerbang API.
+Fungsi `execute` akan diekspor dan nantinya akan dipanggil dari _entrypoint_ gerbang API.
 
 ### Membuat Rest API untuk Gerbang API
 
@@ -524,7 +524,7 @@ app.listen(config.port, () => {
 Disini kita mempunyai 4 _Endpoint_, yaitu:
 
 1. `GET /`
-   _Endpoint_ ini digunakan untuk mengecek apakah Aplikasi Gerbang API kita sudah berjalan dan dapat diakses.
+   _Endpoint_ ini digunakan untuk mengecek apakah aplikasi gerbang API kita sudah berjalan dan dapat diakses.
 2. `GET /dashboard`
    _Endpoint_ ini digunakan untuk menampilkan _file_ `frontend/index.html` yang berisi Aplikasi Dasbor (_frontend_).
 3. `POST /send`
@@ -536,9 +536,9 @@ Aplikasi ini akan dijalankan di _port_ yang telah dideklarasikan di dalam _file_
 
 ## Membuat Dasbor (_Frontend_)
 
-Agar dapat menggunakan aplikasi ini dengan mudah, maka di sini kita membuat Dasbor(_Interface_/\**).
-Aplikasi Dasbor ini akan meneruskan permintaan dari pengguna ke Gerbang API melalui panggilan HTTP untuk menerima data menggunakan Websocket & HTTP.
-Disini kita menggunakan *single\* \*file\* `index.html`, _library_ css yang kita gunakan adalah Bootstrap 4, dan untuk menerima pesan MQTT(Websocket) kita menggunakan _library_ `paho-mqtt`.
+Agar dapat menggunakan aplikasi ini dengan mudah, maka di sini kita membuat Dasbor (_Interface_/\**).
+Aplikasi dasbor ini akan meneruskan permintaan dari pengguna ke gerbang API melalui panggilan HTTP untuk menerima data menggunakan WebSocket & HTTP.
+Disini kita menggunakan *single\* \*file\* `index.html`, _library_ css yang kita gunakan adalah Bootstrap 4, dan untuk menerima pesan MQTT (Websocket) kita menggunakan _library_ `paho-mqtt`.
 
 Buat _file_ `index.html` di dalam direktori `./src/`
 
@@ -599,7 +599,7 @@ Buat _file_ `index.html` di dalam direktori `./src/`
         <h1 class="text-center">✨ Jarwis</h1>
         <p>
           <small>
-            Who need a Jarvis If we can build a jarwis *jk <br />
+            Who need a Jarvis If we can build a Jarwis *jk <br />
             Build With ❤️ &nbsp; By Iqbal Syamil
           </small>
         </p>
@@ -788,7 +788,7 @@ Buat _file_ `index.html` di dalam direktori `./src/`
 
 #### Mengkonfigurasi Aplikasi _Frontend_
 
-Ada hal yang perlu diperhatikan, yaitu memastikan bahwa konfigurasi pada aplikasi Dasbor sudah tepat. Di sini kita mendefinisikan beberapa hal, seperti alamat `apiHost`, alamat `mqqtHost`, _port_ `mqttPort`, format tanggal `dateLang`, dan format bahasa yang digunakan pada _Speech Recognition_ API `speechRecognitionLang` .
+Ada hal yang perlu diperhatikan, yaitu memastikan bahwa konfigurasi pada aplikasi dasbor sudah tepat. Di sini kita mendefinisikan beberapa hal, seperti alamat `apiHost`, alamat `mqqtHost`, _port_ `mqttPort`, format tanggal `dateLang`, dan format bahasa yang digunakan pada _Speech Recognition_ API `speechRecognitionLang` .
 
 ```js
          /* ... Kode Terpotong */
@@ -956,8 +956,8 @@ Cara kerja program ini:
 
 1. Perangkat akan melakukan koneksi ke dalam WiFI yang sudah didefinisikan.
 2. Setelah terkoneksi, perangkat akan melakukan koneksi ke MQTT Broker, men-_subscrib_e topik perangkat, dan mem-\_publish_ pesan ke topik _report_ bahwa perangkat sudah terkoneksi.
-3. Perangkat akan menunggu pesan masuk dari Gerbang API via protokol MQTT (TCP).
-4. Apabila ada pesan yang masuk dengan topik "pompa" atau nama perangkat, maka perangkat akan melakukan perintah untuk menyalakan atau mematikan pompa berdasarkan data _payload_ yang dikirim oleh Gerbang API. Setelah proses eksekusi dilakukan, statusnya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
+3. Perangkat akan menunggu pesan masuk dari gerbang API via protokol MQTT (TCP).
+4. Apabila ada pesan yang masuk dengan topik "pompa" atau nama perangkat, maka perangkat akan melakukan perintah untuk menyalakan atau mematikan pompa berdasarkan data _payload_ yang dikirim oleh gerbang API. Setelah proses eksekusi dilakukan, statusnya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
 5. Apabila ada pesan yang masuk dengan topik "pompa-stats", maka perangkat akan mengambil data dari sensor DHT berupa Temperatur/_Temperature_ dan Kelembabman/_Humidity_, dan hasil nya akan dikirim ke topik "pompa-report" yang sudah dibungkus dengan format JSON.
 
 ##### Mengkonfigurasi Perangkat IoT
