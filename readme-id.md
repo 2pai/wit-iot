@@ -20,41 +20,41 @@ Hari ini kita akan membuat aplikasi asisten personal dengan tujuan untuk mengont
   - [Pengantar](#pengantar)
     - [Apa itu NLP ?](#apa-itu-nlp-)
     - [Tujuan](#tujuan)
-  - [Daftar Isi](#daftar-isi)
+  - [Daftar isi](#daftar-isi)
   - [Membangun Aplikasi](#membangun-aplikasi)
-    - [Bagaimana Cara Kerjanya?](#bagaimana-cara-kerjanya)
-      - [Alur Kerja](#alur-kerja)
-      - [Alur Aksi](#alur-aksi)
-    - [Prasyarat](#prasayarat)
-      - [Perangkat Keras](#perangkat-keras)
-      - [Perangkat Lunak](#perangkat-lunak)
+      - [Bagaimana Cara Kerjanya?](#bagaimana-cara-kerjanya)
+        - [Alur Kerja](#alur-kerja)
+        - [Alur Aksi](#alur-aksi)
+      - [Prasyarat](#prasyarat)
+        - [Perangkat Keras](#perangkat-keras)
+        - [Perangkat Lunak](#perangkat-lunak)
   - [Mempersiapkan Lingkungan Pengembangan Aplikasi](#mempersiapkan-lingkungan-pengembangan-aplikasi)
-    - [Mempersiapkan MQTT Broker & MongoDB](#menyiapkan-mqtt-broker--mongodb)
-    - [Mempersiapkan Konfigurasi](#menyiapkan-konfigurasi)
+    - [Menyiapkan MQTT Broker & MongoDB](#menyiapkan-mqtt-broker--mongodb)
+    - [Mempersiapkan Konfigurasi](#mempersiapkan-konfigurasi)
   - [Melatih Aplikasi Wit untuk Melakukan Pemrosesan Bahasa Natural (NLP)](#melatih-aplikasi-wit-untuk-melakukan-pemrosesan-bahasa-natural-nlp)
-    - [Membuat Aplikasi Wit](#membuat-aplikasi-wit)
-    - [Mentrain Aplikasi Wit dengan Ungkapan](#mentrain-aplikasi-wit-dengan-ungkapan)
-      - [Menyalakan Pompa](#menyalakan-pompa)
-      - [Mematikan Pompa](#mematikan-pompa)
-      - [Mengambil Data Pompa](#mengambil-data-pompa)
-    - [Membuat Konektor Wit pada Aplikasi](#membuat-konektor-wit-pada-aplikasi)
-      - [Memperbaharui _File_ Konfigurasi](#memperbaharui-file-configurasi)
+      - [Membuat Aplikasi Wit](#membuat-aplikasi-wit)
+      - [Mentrain Aplikasi Wit dengan Ungkapan](#mentrain-aplikasi-wit-dengan-ungkapan)
+        - [Menyalakan Pompa](#menyalakan-pompa)
+        - [Mematikan Pompa](#mematikan-pompa)
+        - [Mengambil Data Pompa](#mengambil-data-pompa)
+      - [Membuat konektor wit pada Aplikasi](#membuat-konektor-wit-pada-aplikasi)
+        - [Memperbaharui _file_ Konfigurasi](#memperbaharui-file-konfigurasi)
   - [Membuat Gerbang API](#membuat-gerbang-api)
-    - [Membuat Konektor MongoDB](#membuat-konektor-mongodb)
-    - [Membuat Konektor MQTT](#membuat-konektor-mqtt)
+    - [Membuat konektor MongoDB](#membuat-konektor-mongodb)
+    - [Membuat konektor MQTT](#membuat-konektor-mqtt)
     - [Membuat Kontroler Aplikasi](#membuat-kontroler-aplikasi)
     - [Membuat Rest API untuk Gerbang API](#membuat-rest-api-untuk-gerbang-api)
   - [Membuat Dasbor (_Frontend_)](#membuat-dasbor-frontend)
-    - [Mengkonfigurasi Aplikasi _Frontend_](#mengkonfigurasi-aplikasi-frontend)
+      - [Mengkonfigurasi Aplikasi _Frontend_](#mengkonfigurasi-aplikasi-frontend)
   - [Mengatur Perangkat IoT](#mengatur-perangkat-iot)
     - [Instalasi _Library_](#instalasi-library)
     - [Gambaran Skema Perangkat IoT](#gambaran-skema-perangkat-iot)
-      - [Meng-_compile_ Kode pada Perangkat IoT](#mengcompile-kode-pada-perangkat-iot)
+      - [Meng-_compile_ Kode pada Perangkat IoT](#meng-compile-kode-pada-perangkat-iot)
         - [Mengkonfigurasi Perangkat IoT](#mengkonfigurasi-perangkat-iot)
-  - [Menjalankan Keseluruhan Aplikasi](#menjalankan-keseluruhan-aplikasi)
+  - [Menjalankan Keseluruhan aplikasi](#menjalankan-keseluruhan-aplikasi)
     - [Gambaran Arsitektur](#gambaran-arsitektur)
-    - [Jalankan Gerbang API, MongoDB dan MQTT Broker](#jalankan-gerbang-api-mongodb-dan-mqtt-broker)
-  - [Ringkasan dan Penutup](#ringkasan--penutup)
+    - [Jalankan Gerbang API, MongoDB Dan MQTT Broker](#jalankan-gerbang-api-mongodb-dan-mqtt-broker)
+  - [Ringkasan dan Penutup](#ringkasan-dan-penutup)
     - [Apa Selanjutnya?](#apa-selanjutnya)
     - [Referensi](#referensi)
 
@@ -70,11 +70,11 @@ Secara garis besar, aplikasi ini akan bekerja seperti ini:
 1. Buka _browser_ > pergi ke alamat **Dasbor Aplikasi**.
 2. Klik tombol `Listen` > berikan perintah suara setelah `Log` menampilkan pesan `Recognition Started`
 3. Apabila `Log` menampilkan pesan `Recognition ended` maka perintah akan diteruskan ke _server_.
-4. _Server_ akan melakukan perintah _user_ dan menampilkan data (yang diminta) ke dasbor.
+4. _Server_ akan melakukan perintah pengguna dan menampilkan data (yang diminta) ke dasbor.
 
 ##### Alur Kerja
 
-![alt text](./assets/gif/demo-app.gif 'Demo Dari Aplikasi')
+![alt text](./assets/gif/demo-app-id.gif 'Demo Dari Aplikasi')
 
 Cara kerja aplikasi ini cukup sederhana, tetapi di sini kita menggunakan banyak teknologi untuk mencapai tujuan tersebut. Ini digunakan agar aplikasi yang kita buat kali ini dapat dikembangkan dengan tujuan lebih luas lagi dengan mudah.
 
@@ -177,6 +177,7 @@ Lakukan instalasi _package_ yang akan digunakan pada aplikasi kita dengan membua
 
 Kita juga akan menggunakan MQTT Broker(Mosquitto) & basis data (MongoDB). Alih-alih meng-_install_-nya di _local_/langsung di perangkat yang kita gunakan, kita akan menggunakan Docker untuk menjalankan layanan tersebut.
 
+Buat file `docker-compose.yml` di `./`
 ```yaml
 # Docker-compose.yml
 version: '3.7'
@@ -249,7 +250,7 @@ Pada bagian ini kita ingin mencoba untuk melatih aplikasi wit agar dapat mengena
 
 #### Membuat Aplikasi Wit
 
-1. Buka Wit.ai dan masuk dengan menggunakan akun Facebook
+1. Buka [Wit.ai](https://wit.ai/) dan masuk dengan menggunakan akun Facebook
 2. Buat aplikasi wit
 3. Masukan nama aplikasi, bahasa yang digunakan, dan jenis _visibility_.
 4. Klik `Create`
@@ -540,7 +541,7 @@ Agar dapat menggunakan aplikasi ini dengan mudah, maka di sini kita membuat Dasb
 Aplikasi Dasbor ini akan meneruskan permintaan dari pengguna ke Gerbang API melalui panggilan HTTP untuk menerima data menggunakan Websocket & HTTP.
 Disini kita menggunakan *single\* \*file\* `index.html`, _library_ css yang kita gunakan adalah Bootstrap 4, dan untuk menerima pesan MQTT(Websocket) kita menggunakan _library_ `paho-mqtt`.
 
-Buat _file_ `index.html` di dalam direktori `./src/`
+Buat _file_ `index.html` di dalam direktori `./src/frontend`
 
 ```html
 <!DOCTYPE html>
@@ -813,7 +814,7 @@ Seperti pada bagian pendahuluan, tujuan dari perangkat IoT ini adalah agar kita 
 
 ### Instalasi _Library_
 
-Di sini kita menggunakan 3 _library_ eksternal. Pastikan kita sudah meng-_install_ _library_ tersebut di dalam arduino IDE.
+Di sini kita menggunakan 4 _library_ eksternal. Pastikan kita sudah meng-_install_ _library_ tersebut di dalam arduino IDE.
 
 1. [PubSubClient.h](https://github.com/knolleary/pubsubclient)
 2. [ArduinoJson.h](https://github.com/ekstrand/ESP8266wifi)
