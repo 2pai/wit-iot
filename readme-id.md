@@ -37,7 +37,7 @@ Hari ini kita akan membuat aplikasi asisten personal dengan tujuan untuk mengont
         - [Menyalakan Pompa](#menyalakan-pompa)
         - [Mematikan Pompa](#mematikan-pompa)
         - [Mengambil Data Pompa](#mengambil-data-pompa)
-      - [Membuat konektor wit pada Aplikasi](#membuat-konektor-wit-pada-aplikasi)
+      - [Membuat konektor Wit pada Aplikasi](#membuat-konektor-wit-pada-aplikasi)
         - [Memperbaharui _file_ Konfigurasi](#memperbaharui-file-konfigurasi)
   - [Membuat Gerbang API](#membuat-gerbang-api)
     - [Membuat konektor MongoDB](#membuat-konektor-mongodb)
