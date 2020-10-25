@@ -4,7 +4,7 @@
 
 ## Introduction
 
-As we know, now there's a lot of personal virtual assistant app like Siri, Alexa, Google Assistant, etc who can help us to do many things. We can give command using voice/text and the assistant will give the feedback with information/action. 
+As we know, now there's a lot of personal virtual assistant apps, like Siri, Alexa, Google Assistant, etc that can help us to do many things. We can give commands using voice ot text and the assistant will give the feedback with informations or actions.
 
 ### What is NLP?
 
@@ -12,15 +12,15 @@ NLP stands for _Natural Language Processing_, which is one of the subsets in Art
 
 ### Goals
 
-Today, we gonna build a virtual personal assistant who can control our IoT Device to Watering the plants in the front garden. We will combine a few technology such as NLP, IoT, SpeechAPI, ETC.
+Today, we gonna build a virtual personal assistant that can control our IoT device to watering the plants in the front garden. We will combine a few technologies such as NLP, IoT, SpeechAPI, etc.
 
-## Table of contents
+## Table of Contents
 
 - [Build Smart Assistant with Wit.ai to Manage IoT Device](#build-smart-assistant-with-witai-to-manage-iot-device)
   - [Introduction](#introduction)
     - [What is NLP?](#what-is-nlp)
     - [Goals](#goals)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Building Application](#building-application)
       - [How will it work?](#how-will-it-work)
         - [Here is that flow in action](#here-is-that-flow-in-action)
@@ -60,7 +60,7 @@ Today, we gonna build a virtual personal assistant who can control our IoT Devic
 
 ## Building Application
 
-Before we start building the app, I will describe how the app work and prerequisite to follow. Then, I will describe the detail of all the steps before it's ready to run in production mode.
+Before we start building the app, I will describe how the app work and prerequisite to follow. Then, I will describe the detail of all the steps before it's ready to be run in production mode.
 
 #### How will it work?
 
@@ -109,7 +109,7 @@ In order to run all section on the application, we need a few things to prepare
 
 ## Preparing Environment for Developing Application
 
-The first thing we have to do is preparing the environment for developing our application. We will use [typescript](https://www.typescriptlang.org/) and [npm](https://www.npmjs.com) to developing our app. Make sure Typescript was installed, if not run command `npm install -g typescript` to install typescript
+The first thing we have to do is preparing the environment for developing our application. We will use [typescript](https://www.typescriptlang.org/) and [npm](https://www.npmjs.com) to developing our app. Make sure Typescript was installed, if not run command `npm install -g typescript` to install typescript.
 
 Configure the typescript compiler by create a file `tsconfig.json` :
 ```json
@@ -172,7 +172,7 @@ Then run `npm install` to install packages that needed for our app
 
 ### Provisioning MQTT Broker & MongoDB
 
-We will use MQTT Broker(Mosquitto) & Database(MongoDB). Instead of installing on our host machine, we will use Docker to run the services that we need. With Docker-compose we can easily provisioning our multi-container application in our host.
+We will use MQTT Broker(Mosquitto) & Database(MongoDB). Instead of installing on our host machine, we will use Docker to run the services that we need. With Docker-compose, we can easily provisioning our multi-container application in our host.
 
 Create `docker-compose.yml` at the root folder of the application.
 ```yaml
@@ -196,7 +196,7 @@ services:
       - 27017:27017
 ```
 
-To enable Websocket Protocol in MQTT Broker, we can add the configuration file to create a file called `mosquitto.conf` in `./conf/` and set the Websocket Protocol to running on port 9001.
+To enable Websocket Protocol in MQTT Broker, we can add the configuration file to create a file called `mosquitto.conf` in `./conf/` and set the Websocket Protocol to be run on port 9001.
 
 ```
 
@@ -211,7 +211,7 @@ protocol websockets
 
 ### Provisioning Configuration Files
 
-To store Configuration, we will use `.env` file. 
+To store the Configuration, we will use `.env` file. 
 
 Create this file on root folder :
 
@@ -241,11 +241,11 @@ export default {
 };
 ```
 
-After all that step is done, we can start to develop our application.
+After those steps are done, we can start to develop our application.
 
 ## Train Wit Application for Natural Language Processing (NLP)
 
-In this tutorial, we will use [wit.ai](https://wit.ai/) as an NLP System. With this, we can build our personal assistant as natural as possible and we didn't have to do a lot of Machine learning coding like using PyTorch, Tensorflow, etc to train our application.
+In this tutorial, we will use [wit.ai](https://wit.ai/) as an NLP System. With this, we can build our personal assistant as natural as possible and we didn't have to do a lot of Machine Learning coding like using PyTorch, Tensorflow, etc to train our application.
 
 In this section, we will try to train our Wit App to identify several commands like `set_device` and `get_device` in our IoT device.
 
@@ -295,7 +295,7 @@ Iterate the process and make sure the output matches what you expected.
 
 #### Create Connector Wit 
 
-Wit.ai using a REST to communicate. Instead, we will use a library called `node-wit` to create a connector for our API Gateway, it will make the code more less.
+Wit.ai using a REST to communicate. Instead, we will use a library called `node-wit` to create a connector for our API Gateway, it will make the code less.
 
 Create a file called `wit.ts` in `./src/backend/`
 
@@ -334,11 +334,11 @@ WIT_TOKEN= <Your wit token>
 
 ## Create API Gateway
 
-API Gateway will be used to be a middleware for Dashboard, Wit.ai, MQTT, and MongoDB. We will use REST as an interface, and consumed by the Dashboard (Frontend)
+API Gateway will be used to be a middleware for Dashboard, Wit.ai, MQTT, and MongoDB. We will use REST as an interface, and will be consumed by the Dashboard (Frontend)
 
 ### Create MongoDB Connector
 
-In this section we will create a MongoDB connector in our API Gateway, MongoDB will used to store history statistics data from our IoT device. We will create file `mongo.ts` in `./src/backend`
+In this section we will create a MongoDB connector in our API Gateway, MongoDB will be used to store history statistics data from our IoT device. We will create file `mongo.ts` in `./src/backend`
 
 ```typescript
 // mongo.ts
@@ -368,7 +368,7 @@ This connector also includes a schema of the data and `Init()` function is used 
 
 ### Create MQTT Connector
 
-To communicate with the IoT devices via API Gateway, we will use the MQTT Protocol(TCP). The main reason why we used the MQTT Protocol is to make our application can handle requests in asynchronous mode and didn't block the other process. For other reasons, MQTT was the protocol that was commonly used to communicate with IoT devices.
+To communicate with the IoT devices via API Gateway, we will use the MQTT Protocol(TCP). The main reason why we use the MQTT Protocol is to make our application can handle requests in asynchronous mode and didn't block the other processes. For other reasons, MQTT is the protocol that is commonly used to communicate with IoT devices.
 
 To create a connector, we create file `mqtt.ts` in `./src/backend/`
 
@@ -423,7 +423,7 @@ export default {
 };
 ```
 
-In this code we wrap function `publish` and `subscribe` in the `mqtt.client`, it will enable us to reuse the function in another module.
+In this code, we wrap function `publish` and `subscribe` in the `mqtt.client`, it will enable us to reuse the function in another module.
 
 We handle the incoming message from the IoT device, incoming report message with kind `pompa-stats` will be inserted to MongoDB. Then, the payload which includes data from statistics of IoT Device will be forwarded to the Dashboard (Frontend) using MQTT with topic `web`
 
@@ -467,12 +467,12 @@ export default {
 };
 ```
 
-Function `execute` will check The Intent from payload. If The Intent was `set_device` then a message will be published through MQTT with The Device name (from Entity) as a topic which includes Traits (On/OFF) as a payload. If The Intent was `get_device` then a message will be published through MQTT with `pompa-stats` as a topic and include `1` as payload to trigger the sensor on IoT Device.
+Function `execute` will check The Intent from payload. If The Intent is `set_device` then a message will be published through MQTT with the device name (from Entity) as a topic which includes Traits (On/OFF) as a payload. If The Intent is `get_device` then a message will be published through MQTT with `pompa-stats` as a topic and include `1` as payload to trigger the sensor on IoT Device.
 
 This function will be exported and called from the entrypoint of API Gateway.
 ### Create REST API for API Gateway
 
-We will use REST as an API. But, Not only for backend services, we will use this to serve the Dashboard (Frontend) too.
+We will use REST as an API. But, not only for backend services, we will use this to serve the Dashboard (Frontend) too.
 
 Create `app.ts` in `./src/backend/`
 ```typescript
@@ -525,19 +525,19 @@ app.listen(config.port, () => {
 We have will have 4 Endpoint
 
 1. `GET /`
-    This Endpoint will be used to check the status of our REST API Server, which is running successfully and can be accessed.
+    This endpoint will be used to check the status of our REST API Server, which is running successfully and can be accessed.
 2. `GET /dashboard`
-   This Endpoint will be used to serve the static file from the frontend app(Dashboard), it will serve file `frontend/index.html`
+   This endpoint will be used to serve the static file from the frontend app(Dashboard), it will serve file `frontend/index.html`
 3. `POST /send`
-   This Endpoint is used to receive a text payload from the frontend, the payload will be used as a parameter to request Wit Application and make a prediction. The result will be pass to `execute` function on the controller to determine what action to take.
+   This endpoint is used to receive a text payload from the frontend, the payload will be used as a parameter to request Wit Application and make a prediction. The result will be passed to `execute` function on the controller to determine what action to take.
 4. `GET /sensor-data`
-  This Endpoint will be used to display the 5 last data from Sensor on IoT Device. It will used to be an Init data in our frontend application.
+  This endpoint will be used to display the 5 last data from sensor on IoT Device. It will be used to be an init data in our frontend application.
 
 This REST API will be running on the PORT that we specify on `.env` file.
 
 ## Create Dashboard (Frontend)
 
-To make the application more easily, we need a Dashboard (Frontend) application. This Application will be an interface from our app, the request will be passed to our backend application. We will use Websocket & TCP as protocols to communicate with the backend server. 
+To make the application more easily, we need a Dashboard (Frontend) application. This application will be an interface of our app, The request will be passed to our backend application. We will use Websocket & TCP as protocols to communicate with the backend server. 
 
 Our frontend app was very simple, we only use single file `index.html`, for Styling we use Bootstrap 4 as a CSS library and `paho-mqtt` library to receive message from MQTT (Websocket)
 
@@ -788,7 +788,7 @@ Create `index.html` in `./src/frontend/`
 
 #### Configure Frontend 
 
-There are several things to take attention to, we have to make sure the configuration in our application was correct. We have to define several things like address of API Gateway, address of MQTT, port of MQTT(Websocket), date format, and language format that are used in Speech Recognition API.
+There are several things to take attention to, we have to make sure the configuration in our application is correct. We have to define several things, like the address of API Gateway, address of MQTT, port of MQTT(Websocket), date format, and language format that are used in Speech Recognition API.
 
 ```js
          /* ... Truncated code  */
@@ -805,15 +805,15 @@ There are several things to take attention to, we have to make sure the configur
 
 ## Manage IoT Device
 
-As in the introduction section, the goals of our IoT device were to Watering the plants by using a pump. So, we will make sure that our IoT Device can do 3 things :
+As in the introduction section, the goal of our IoT device is watering the plants by using a pump. So, we will make sure that our IoT Device can do 3 things :
 
-1. Turn on the Pump
-2. Turn off the Pump
+1. Turn on the pump
+2. Turn off the pump
 3. Get statistics data from the sensor
 
 ### Installing Library
 
-We will 4 external libraries. Please make sure that you already install that library in the Arduino IDE.
+We will have 4 external libraries. Please make sure that you have already installed those libraries in the Arduino IDE.
 
 1. [PubSubClient.h](https://github.com/knolleary/pubsubclient)
 2. [ArduinoJson.h](https://github.com/ekstrand/ESP8266wifi)
@@ -822,7 +822,7 @@ We will 4 external libraries. Please make sure that you already install that lib
 
 ### IoT Device wiring schema
 
-Please make sure the wiring pin was correct like the scheme below.
+Please make sure the wiring pin is correct like as the schema below.
 
 ![alt text](./assets/img/skema.png 'Gambaran Skema Perangkat IoT')
 Notes :
@@ -833,7 +833,7 @@ Notes :
 
 #### Compile The Program
 
-Use the code below to compile in your IoT Device (NodeMCU ESP8266).
+Use the code below to compile your IoT Device (NodeMCU ESP8266).
 
 ```c++
 #define SerialMon Serial
@@ -954,15 +954,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 How The Program works 
 
-1. The Device will connect to WiFI that is already defined.
-2. After getting connected, The Device will connect to the MQTT Broker, subscribe `pompa` / device name topic, and publish a message to the topic `report` to tell the device is ready to use.
+1. The Device will connect to WiFI that have already defined.
+2. After getting connected, the device will connect to the MQTT Broker, subscribe `pompa` / device name topic, and publish a message to the topic `report` to tell that the device is ready to use.
 3. The Device will wait until get messages from API Gateway.
 4. If there's a message coming from topic `pompa` / device name topic, then The device will execute the command where's to Turn on/off the pump based on data payload. After the command was executed, a status will be sent to `pompa-report` as feedback encoded in JSON.
-5. If there's a message coming from topic `pompa-stats` then The Device will get data from the DHT Sensor (Temperature & Humidity) and the result will be sent to `pompa-report` topic encoded in JSON.
+5. If there's a message coming from topic `pompa-stats` then the device will get data from the DHT Sensor (Temperature & Humidity) and the result will be sent to `pompa-report` topic encoded in JSON.
 
 ##### Configuring IoT Device
 
-Define several variable config in `arduino/pompa.ino` which is included `ssid`, `password`, `broker`.
+Define several variable configurations in `arduino/pompa.ino` which is included `ssid`, `password`, `broker`.
 
 ```c++
 // ... Truncated code 
@@ -980,7 +980,7 @@ DHTesp dht;
 
 ```
 
-Then, the code is ready to compile to your IoT Device.
+Then, the code is ready to be compiled to your IoT Device.
 
 ## Run The Application
 
@@ -992,7 +992,7 @@ After we have done with all the steps above, here is a complete overview of the 
 
 ### Run The Application, MongoDB and MQTT Broker
 
-After the configuration was complete, to run the app, run the commands below in order.
+After the configuration is complete, to run the app, run the commands below in order.
 
 1. `docker-compose up` (Run MQTT Broker & MongoDB)
 2. `npm run dev` (Run the app in Dev Mode)
@@ -1001,13 +1001,13 @@ After the configuration was complete, to run the app, run the commands below in 
 
 ## Summary
 
-Congratulations, we already build a project to control our IoT Device with wit.ai & NLP. In this article, we learn so many things like how we train our NLP app with Wit.ai, How to communicate to IoT Device, Etc. Hopefully what we have been learned today can be useful and can be developed into even cooler things! 😁
+Congratulations, we have already build a project to control our IoT Device with wit.ai & NLP. In this article, we learn so many things like how we train our NLP app with Wit.ai, how to communicate to IoT Device, etc. Hopefully what we have been learned today can be useful and even can be developed into even cooler things! 😁
 
 The entire code of this project can be accessed [here](https://github.com/2pai/wit-iot/)
 
 ### What's Next?
 
-This application isn't perfect. If you folks interested in Developing this application there's some list of idea :
+This application isn't perfect. If you folks interested in developing this application, here are some list of idea:
 
 - Manage Mulitple IoT Device (Add, Delete, and Update)
 - Visualize Active/Not Active of IoT Device 
